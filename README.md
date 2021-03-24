@@ -1,5 +1,5 @@
 # dbsproject
-##To start contributing:
+## To start contributing:
 1. Fork the original repository. This forked copy should show up on your list of repositories.
 2. Create a folder in your system, and using the command line, cd to it. This folder will contain your project.
 3. Now cd to this new folder and open command line here. Type "git clone https://github.com/evatiwari/dbsproject.git"
