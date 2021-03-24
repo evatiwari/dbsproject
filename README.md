@@ -7,7 +7,7 @@
 5. Next, type "git remote add github https://github.com/<your-github-handle>/dbsproject.git". Note the 
    difference between the two URLs.
 6. Everytime you have added a new feature and it works without showing any errors, type the following commands 
-   in the following sequence -
+   in the following sequence:
    * git status - to check what needs to be added
    * git add <file-name> - to add the file to the commit stage
      Alternatively, type git add -A if there are too many files.
