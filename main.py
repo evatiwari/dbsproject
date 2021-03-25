@@ -1,6 +1,16 @@
 from flask import Flask, render_template
-
 app = Flask(__name__, template_folder='templates', static_folder='static')
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, User, Trip, TransportBooking, TravelCompany,\
+Mode, Hotel, HotelA, HotelBooking, Room
+
+engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
+Base.metadata.create_all(engine)
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 @app.route('/')
 def index():
