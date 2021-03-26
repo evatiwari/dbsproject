@@ -1,19 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
-    <title>Login</title>
+    <title>Sign Up</title>
 </head>
-
 <body>
     <h1>Login Page</h1>
-    <form action="/login" method="POST">
+    <form action="/signup" method="POST">
         <label for="inputUsername">Username</label>
-        <input type="text" name="username" required/>
+        <input type="text">
+        <label for="inputEmail">Email address</label>
+        <input type="email">
         <label for="inputPassword">Password</label>
-        <input type="password" name="password" required/>
-        <input type="submit"/>
+        <input type="password">
+        <input type="checkbox" value="remember-me"> Remember me
     </form>
 
 </body>
