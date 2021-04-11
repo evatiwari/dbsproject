@@ -21,7 +21,7 @@ for x in cursor:
 #engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
 #Base.metadata.create_all(engine)
 
-app.secret_key = "ilikeskysowner"
+app.secret_key = "maynardjameskeenan"
 
 @app.route('/')
 def index():
@@ -32,9 +32,14 @@ def login():
     if request.method == 'POST':
         session.pop('user', None)
         #SQL query to retrieve password
-        if request.form['password'] == 'pass':
-            session['user'] = request.form['username']
-            return redirect(url_for('user'))
+        uname=request.form['username']
+        password=cursor.execute("SELECT user_pass FROM user WHERE user_name='%s'",uname)
+        for x in cursor.fetchall():
+            print(x)
+        #if request.form['password'] == password:
+            #session['user'] = request.form['username']
+            #return redirect(url_for('user'))
+    print("hello?")
     return render_template("login.html")
 
 @app.route('/signup', methods = ['GET', 'POST'])
@@ -46,12 +51,8 @@ def signup():
         address=request.form['address']
         phone_number=request.form['phone']
         cursor.execute("SELECT MAX(user_id) FROM user")
-        max_uid=cursor.fetchall()
+        result=cursor.fetchone()
         uid=0
-        if len(max_uid)==0:
-            uid=0
-        else:
-            uid=int(max_uid[0])+1
         query="INSERT INTO user VALUES (%s,%s,%s,%s,%s,%s)"
         cursor.execute(query,(uid,user_name,email,password,phone_number,address))
         cursor.execute("COMMIT")
@@ -78,6 +79,11 @@ def hotel():
 @app.route('/bookings')
 def bookings():
     return render_template("bookings.html")
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
