@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Confirmation Page </title>
+       
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+        <style>
+            .button {
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+            
+            .button1 {background-color: #4CAF50; font-size: 15px; width: 100px; height: 12px; text-align: center; padding-top: 0.5%; padding-bottom: 1.75%; padding-left: 2%;} 
+            .button2 {background-color: red; font-size: 15px; width: 100px; height: 12px; text-align: center; padding-top: 0.5%; padding-bottom: 1.75%;} 
+        </style>
+
+    </head>
+
+    <body>
+        <div class="Box1">
+            <div class="bg-image"></div>
+            <h3>Travel Details : Confirmation</h3>
+            <p>
+            Please check the below details and click "confirm" to make the booking. To make changes, click "back".    
+            </p>
+            
+
+            <body>
+        
+                <table>
+                   
+                   <tr>
+                       <th>Particulars</th>
+                       <th>Choice</th>
+                   </tr>
+                   <tr>
+                       <td>Travel Company</td>
+                       <td> </td>
+                   </tr>
+                   <tr>
+                       <td>Departure</td>
+                       <td> </td>
+                   </tr>
+                   <tr>
+                       <td>Arrival</td>
+                       <td> </td>
+                   </tr>
+                   <tr>
+                       <td>Date of travel (Departure):</td>
+                       <td> </td>
+                   </tr>
+                   <tr>
+                       <td>Date of travel (Arrival):</td>
+                       <td> </td>
+                   </tr>
+                   <tr>
+                       <td>Mode of transport</td>
+                       <td> </td>
+                   </tr>
+                   
+                    <tr>
+                    <td>Number of tickets</td>
+                    <td> </td>
+                    </tr>
+
+
+                    <tr>
+                    <td>Price</td>
+                    <td> </td>
+                    </tr>
+
+
+                </table>   
+       
+           </body>
+
+            <form class = "MyForm">
+                <br>
+                <br>
+                
+                <button class="button btn-purple">Confirm</button>
+                <button class="button btn-danger">Back</button>
+            </form>
+
+        </div>
+    </body>
+
+   
+</html>

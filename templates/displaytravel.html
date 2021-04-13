@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <title>Travel Planning Step 2</title>
+</head>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+	<h4 align = "center">Choose the Company you wish to travel with: </h4>
+	<br>
+	<p align="center">You have chosen to travel from {{newTransport.from_dest}} to {{newTransport.to_dest}}  </p>
+	<p align="center"><a class="btn btn-purple text-white" href= '{{url_for("travel")}}' >Return to Step 1</a></p>
+<div class="container">
+	<div class="row" >
+	{% for i in travelcomp %}
+
+<div class="col col-6">
+<div class= "card card-transparent">
+
+	<h5 class="card-header" align="center">{{i.travel_name}}</h5>
+
+	<p class="card-text">Contact details: {{i.travel_contact}}
+
+	<br>
+	Number of tickets left: {{i.num_tickets}}</p>
+	<br><p align="center">
+	<table align="center"><tr><td>Proceed with {{i.travel_name}}  <input class="text-white btn btn-sm btn-pink" type = 'submit' value = "Submit" ></td></tr></table>
+</p>
+</br>
+
+</div>
+<br><br><br>
+</div>
+
+{% endfor %}
+</div>
+</div>
+</body>
+</html>

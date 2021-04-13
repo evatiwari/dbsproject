@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
+  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <title>Travel Planning Step 1</title>
+</head>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+    <div align="col-4 mx-auto">
+    	<div class ="card card-transparent">
+    		<h4 class= "class-header" align ="center">Please enter the following information for:</h4>
+    		<div class ="card-body">
+    			<form action="{{url_for('travel')}}" method ='POST'>
+		            <table align="center">
+		            	<tr>
+		                    <td >Number of tickets:</td>
+		                    <td ><input type="Number" placeholder="Number of rooms" min = 0 name='numtickets'></td>
+		                </tr>
+		                <tr>
+		                    <td>Date of Travel:</td>
+		                    <td><input type="date" placeholder="DD-MONTH-YYYY" name='check_in'></td>
+		                </tr>
+		                <tr>
+		                    <td>Departure:</td>
+		                    <td><input type="text" placeholder="Departure" name='from'></td>
+		                </tr>
+		                <tr>
+		                    <td>Arrival:</td>
+		                    <td><input type="text" placeholder="Arrival" name='to'></td>
+		                </tr>
+		                <tr>
+		                	<br><br>
+		                </tr>
+		                <tr><td><input type="submit" class ="btn-purple btn text-white" value = "Submit"/ ></td></tr>
+		            </table>
+		        </form>
+		       
+        		
+		     </div>
+        	
+    	</div>
+    </div>
+        
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
+</body>
+
+</html>
