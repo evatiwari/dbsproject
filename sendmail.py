@@ -8,7 +8,3 @@ def sendmail(receiver):
         subject="Boo!",
         contents=body,
     )
-
-sendmail("f20180790@hyderabad.bits-pilani.ac.in")
-sendmail("f20180886@hyderabad.bits-pilani.ac.in")
-sendmail("f20180936@hyderabad.bits-pilani.ac.in")
