@@ -51,6 +51,7 @@ class TransportBooking(Base):
     depart_date=Column(DateTime)
     to_dest=Column(String(80))
     from_dest=Column(String(80))
+    totprice = Column(Integer)
     travel_id=Column(Integer, ForeignKey('travel_company.travel_id'))
     travel_comp = relationship(TravelCompany)
     mode = relationship(Mode)

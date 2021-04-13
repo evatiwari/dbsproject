@@ -1,95 +1,85 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title> Confirmation Page </title>
-       
-         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<html lang="en">
+     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
-        <style>
-            .button {
-              border: none;
-              color: white;
-              padding: 15px 32px;
-              text-align: center;
-              text-decoration: none;
-              display: inline-block;
-              font-size: 16px;
-              margin: 4px 2px;
-              cursor: pointer;
-            }
-            
-            .button1 {background-color: #4CAF50; font-size: 15px; width: 100px; height: 12px; text-align: center; padding-top: 0.5%; padding-bottom: 1.75%; padding-left: 2%;} 
-            .button2 {background-color: red; font-size: 15px; width: 100px; height: 12px; text-align: center; padding-top: 0.5%; padding-bottom: 1.75%;} 
-        </style>
-
-    </head>
-
-    <body>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <title>Travel Planning Step 3</title>
+</head>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+    
         <div class="Box1">
-            <div class="bg-image"></div>
-            <h3>Travel Details : Confirmation</h3>
-            <p>
+           
+            <h4 align="center">Travel Details : Confirmation</h4>
+            <p align="center">
             Please check the below details and click "confirm" to make the booking. To make changes, click "back".    
             </p>
             
 
-            <body>
-        
-                <table>
-                   
-                   <tr>
+            
+        <div class="card">
+          <div class="card-body">
+                <table align="center">
+                
+                   <tr class="card-header">
                        <th>Particulars</th>
                        <th>Choice</th>
                    </tr>
                    <tr>
                        <td>Travel Company</td>
-                       <td> </td>
+                       <td>{{travel.travel_name}}</td>
                    </tr>
                    <tr>
                        <td>Departure</td>
-                       <td> </td>
+                       <td> {{newTransport.from_dest}}</td>
                    </tr>
                    <tr>
                        <td>Arrival</td>
-                       <td> </td>
+                       <td> {{newTransport.to_dest}}</td>
                    </tr>
                    <tr>
-                       <td>Date of travel (Departure):</td>
-                       <td> </td>
+                       <td>Date of travel (Departure)</td>
+                       <td>{{newTransport.depart_date}} </td>
                    </tr>
                    <tr>
-                       <td>Date of travel (Arrival):</td>
-                       <td> </td>
+                       <td>Date of travel (Arrival)</td>
+                       <td>{{newTransport.arrival_date}} </td>
                    </tr>
                    <tr>
                        <td>Mode of transport</td>
-                       <td> </td>
+                       <td> {{mode.mode_of_transport}}</td>
                    </tr>
                    
                     <tr>
                     <td>Number of tickets</td>
-                    <td> </td>
+                    <td> {{newTransport.num_tickets}}</td>
                     </tr>
 
 
                     <tr>
                     <td>Price</td>
-                    <td> </td>
+                    <td> {{newTransport.totprice}}</td>
                     </tr>
 
 
                 </table>   
-       
-           </body>
-
-            <form class = "MyForm">
-                <br>
-                <br>
-                
-                <button class="button btn-purple">Confirm</button>
-                <button class="button btn-danger">Back</button>
+              </div>
+              <div class="card-footer">
+                <form action = "{{url_for('confirmtravel', newTransport_id =newTransport.booking_id ) }}" class = "MyForm" method ='POST'>
+                <p align="center">
+                <input type = "submit" name="action" value = "Confirm" class="btn btn-purple text-white"> 
+                <input type ="submit" name="action" value ="Back" class="btn btn-darkviolet text-white">
+                <input type="submit" name = "action" value ="Delete" class="btn btn-danger">
+               
+              </p>
             </form>
+              </div>
+       </div>
+           
+
+            
 
         </div>
     </body>

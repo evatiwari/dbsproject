@@ -11,10 +11,10 @@
 </head>
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
     <div align="col-4 mx-auto">
-    	<div class ="card card-transparent">
-    		<h4 class= "class-header" align ="center">Please enter the following information for:</h4>
+    		<h4  align ="center">Please enter the following information for:</h4>
+    	<div class ="card card-transparent">    	
     		<div class ="card-body">
-    			<form action="{{url_for('travel')}}" method ='POST'>
+    			<form action="{{url_for('travel' , newTransport_id = newTransport_id)}}" method ='POST'>
 		            <table align="center">
 		            	<tr>
 		                    <td >Number of tickets:</td>

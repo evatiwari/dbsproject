@@ -13,23 +13,43 @@
 	<h4 align = "center">Choose the Company you wish to travel with: </h4>
 	<br>
 	<p align="center">You have chosen to travel from {{newTransport.from_dest}} to {{newTransport.to_dest}}  </p>
-	<p align="center"><a class="btn btn-purple text-white" href= '{{url_for("travel")}}' >Return to Step 1</a></p>
-<div class="container">
+	<p align="center"><a class="btn btn-purple text-white" href= '{{url_for("travel" , newTransport_id = newTransport.booking_id )}}' >Return to Step 1</a><br>
+	
+	</p>
+	<form action="{{url_for('travelcomp' , newTransport_id = newTransport.booking_id)}}" method ='POST'>
+	<p align ="center">
+	<input type ="submit" name ="action" class="btn btn-rose text-white" value= "All">
+	<input type ="submit" name ="action" class="btn btn-rose1 text-white" value ="Flights">
+	<input type ="submit" name ="action"  class="btn btn-rose2 text-white" value="Trains"><br><br>
+	<input type ="submit" class="text-white btn btn-pink" name ="action" value = "Submit" ></p>
+	<div class="container">
 	<div class="row" >
+	
 	{% for i in travelcomp %}
 
-<div class="col col-6">
-<div class= "card card-transparent">
+	<div class="col col-6">
+	<div class= "card card-transparent">
 
 	<h5 class="card-header" align="center">{{i.travel_name}}</h5>
 
-	<p class="card-text">Contact details: {{i.travel_contact}}
-
+	<p class="card-text">
+	<table align= "center"><tr> <td><b>Contact details:</b></td><td> {{i.travel_contact}}</td></tr>
 	<br>
-	Number of tickets left: {{i.num_tickets}}</p>
-	<br><p align="center">
-	<table align="center"><tr><td>Proceed with {{i.travel_name}}  <input class="text-white btn btn-sm btn-pink" type = 'submit' value = "Submit" ></td></tr></table>
-</p>
+	
+
+	
+	{%for m in mode%} 
+	
+	{%if i.mode_id == m.mode_id%}
+	<tr><td><b>Available seat type:</b></td><td>{{m.mode_of_transport}} </td></tr>
+	{% endif %}
+	{% endfor %}
+	<br>
+	<tr><td><b>Number of tickets left:</b></td> <td>{{i.num_tickets}}</td></tr></table></p>
+	<br>
+	<p align="center">
+		<div class= "radio-option"><table align="center"><tr><td><input type="radio" name="options"  value="{{i.travel_id}}">     Proceed with {{i.travel_name}}?</input> </td></tr></table></div>
+	</p>
 </br>
 
 </div>
@@ -37,7 +57,17 @@
 </div>
 
 {% endfor %}
+
 </div>
 </div>
+
+
+
+
+
+
+
+
+</form>
 </body>
 </html>

@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text 
 from database_setup import Base, User, Trip, TransportBooking, TravelCompany, Mode, Hotel, HotelA, HotelBooking, Room
-
+import datetime
 engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
 
 Base.metadata.create_all(engine)
@@ -20,9 +20,19 @@ cursor = mydb.cursor()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/' )
+@app.route('/' ,methods =['GET' , 'POST'] )
 def index():
-	return render_template("index.html")
+	
+	if request.method =='POST':
+		if request.form['action'] == 'Transport Booking':
+			newTransport = TransportBooking()
+			newTransport_id = newTransport.booking_id
+			session.add(newTransport)
+			session.commit()
+			return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+
+	else:
+		return render_template("index.html")
 
 @app.route('/login')
 def login():
@@ -40,14 +50,14 @@ def hotel():
 def bookings():
     return render_template("bookings.html")
 
-@app.route('/travel', methods =['GET','POST'])
-def travel():
-	
+@app.route('/travel/<int:newTransport_id>', methods =['GET','POST'])
+def travel(newTransport_id):
+	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
 	if request.method == 'POST':
-		newTransport = TransportBooking()
-		newTransport_id = newTransport.booking_id
-		session.add(newTransport)
-		session.commit()
+		#newTransport = TransportBooking()
+		#newTransport_id = newTransport.booking_id
+		#session.add(newTransport)
+		#session.commit()
 		if request.form['numtickets']:
 			newTransport.num_tickets = request.form['numtickets']
 		if request.form['check_in']:
@@ -61,7 +71,7 @@ def travel():
 		return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
 	else:
 		print("GET method on travelpage1")
-		return render_template('travelpage1.html'  )
+		return render_template('travelpage1.html' , newTransport_id= newTransport_id )
 
 @app.route('/check')
 def check():
@@ -70,16 +80,71 @@ def check():
 @app.route('/travelcomp/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def travelcomp(newTransport_id):
 	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-	travelcomp = session.execute('select * from travel_company')
-	mode = session.query(Mode)
-	return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = Mode )
+	travelcomp = session.query(TravelCompany)
+	#modes = session.execute('select * from mode')
+	modes = session.query(Mode)
+	if request.method == 'POST':
+		#if request.form['name']:
+		if request.form['action'] == "Submit" :
+			print('The form has data, we can proceed')
+			newTransport.travel_id = request.form['options']
+			chosenTravel = session.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+			newTransport.travel_mode = chosenTravel.mode_id
+			if chosenTravel.mode_id >300 :
+				newTransport.arrival_date = newTransport.depart_date + datetime.timedelta( days = 2 ,hours=5, minutes=13)
+			else:
+				newTransport.arrival_date = newTransport.depart_date + datetime.timedelta( days = 1 ,hours=2, minutes=10)
+			#price = session.execute(text('select price from mode where mode.mode_id = :ii'),{'ii': request.form['options'] })
+			price = session.query(Mode).filter_by(mode_id = chosenTravel.mode_id).one()
+			newTransport.totprice = newTransport.num_tickets *price.price
+			chosenTravel.num_tickets = chosenTravel.num_tickets - newTransport.num_tickets
+			session.add(newTransport)
+			session.execute(text("update travel_company set num_tickets= :num where travel_company.travel_id = :idf"),{'num' :chosenTravel.num_tickets,'idf' : newTransport.travel_id})
+			session.commit()
+			cursor.execute("commit")
+			return redirect(url_for('confirmtravel', newTransport_id = newTransport_id))
+		elif request.form['action'] == 'All':
+			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )
+		elif request.form['action'] == 'Flights':
+			travelcomp = session.query(TravelCompany).filter( TravelCompany.mode_id  < 300)
+			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )
+		elif request.form['action'] == 'Trains':
+			travelcomp = session.query(TravelCompany).filter(TravelCompany.mode_id  >= 300)
+			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )	
+			
+	else:
+		return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )
 
-@app.route('/confirmtravel')
-def confirmtravel():
-	return render_template("confirmtravel.html")
+@app.route('/confirmtravel/<int:newTransport_id>' , methods = ['GET', 'POST'])
+def confirmtravel(newTransport_id):
+	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+	travelcomp = session.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+	modes = session.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
+	if request.method=='POST':
+		if request.form['action'] == 'Delete':
+			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+			session.add(travelcomp)
+			itemToDelete = session.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
+			session.delete(itemToDelete)
+			session.commit()
+			return redirect(url_for('index'))
+		elif request.form['action'] == 'Confirm':
+			return redirect(url_for('index'))
+		elif request.form['action'] == 'Back':
+			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+			session.add(travelcomp)
+			session.commit()
+			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
+	else:
+		return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
 
 
 if __name__ == '__main__':
 	
 	app.debug=True
 	app.run(host='0.0.0.0', port=5000)
+
+
+
+
+	
