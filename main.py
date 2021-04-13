@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, g, session
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 import os
