@@ -20,19 +20,22 @@ cursor = mydb.cursor()
 def index():
 	return render_template("index.html")
 
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['GET','POST'])
 def login():
     if request.method == 'POST':
         session.pop('user', None)
         #SQL query to retrieve password
         uname=request.form['username']
-        password=cursor.execute("SELECT user_pass FROM user WHERE user_name='%s'",uname)
-        for x in cursor.fetchall():
-            print(x)
-        #if request.form['password'] == password:
-            #session['user'] = request.form['username']
-            #return redirect(url_for('user'))
-    print("hello?")
+        try:
+            sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
+            cursor.execute(sql)
+            password=cursor.fetchone()[0]
+            if request.form['password'] == password:
+                session['user'] = request.form['username']
+                return render_template('user.html')
+        except Exception as E:
+            print(E)
+            return redirect(url_for('login'))
     return render_template("login.html")
 
 @app.route('/signup', methods = ['GET', 'POST'])
