@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text 
 from database_setup import Base, User, Trip, TransportBooking, TravelCompany, Mode, Hotel, HotelA, HotelBooking, Room
 import datetime
+from sendmail import sendmail
+
 engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
 Base.metadata.create_all(engine)
 
@@ -21,33 +23,26 @@ cursor = mydb.cursor()
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/index' ,methods =['GET' , 'POST'] )
+@app.route('/' )
 def index():
-	
-	if request.method =='POST':
-		if request.form['action'] == 'Transport Booking':
-			newTransport = TransportBooking()
-			newTransport_id = newTransport.booking_id
-			session.add(newTransport)
-			session.commit()
-			return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+	return render_template("index.html")
 
-	else:
-		return render_template("index.html")
-
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['GET','POST'])
 def login():
     if request.method == 'POST':
         session.pop('user', None)
         #SQL query to retrieve password
         uname=request.form['username']
-        password=cursor.execute("SELECT user_pass FROM user WHERE user_name='%s'",uname)
-        for x in cursor.fetchall():
-            print(x)
-        #if request.form['password'] == password:
-            #session['user'] = request.form['username']
-            #return redirect(url_for('user'))
-    print("hello?")
+        try:
+            sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
+            cursor.execute(sql)
+            password=cursor.fetchone()[0]
+            if request.form['password'] == password:
+                session['user'] = request.form['username']
+                return render_template('user.html')
+        except Exception as E:
+            print(E)
+            return redirect(url_for('login'))
     return render_template("login.html")
 
 @app.route('/signup', methods = ['GET', 'POST'])
@@ -66,8 +61,6 @@ def signup():
         cursor.execute("COMMIT")
         return redirect(url_for('login'))
     return render_template("signup.html")
-
-
 @app.route('/user')
 def user():
     if g.user:
@@ -79,6 +72,32 @@ def before_request():
     g.user=None
     if 'user' in session:
         g.user = session['user']
+
+@app.route('/trips', methods= ['POST' , 'GET'])
+def trips():
+		if request.method =='POST':
+			if request.form['action'] == 'Transport Booking':
+				newTransport = TransportBooking()
+				newTransport_id = newTransport.booking_id
+				session.add(newTransport)
+				session.commit()
+				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+			if request.form['action'] == 'Hotel Booking':
+				return redirect(url_for('hotel' , newTransport_id = newTransport.booking_id))
+			if request.form['action'] == 'Transport Booking':
+				newTransport = TransportBooking()
+				newTransport_id = newTransport.booking_id
+				session.add(newTransport)
+				session.commit()
+				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+			if request.form['action'] == 'Transport Booking':
+				newTransport = TransportBooking()
+				newTransport_id = newTransport.booking_id
+				session.add(newTransport)
+				session.commit()
+				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+		else:
+			return render_template("trips.html")
 
 @app.route('/hotel')
 def hotel():
@@ -93,10 +112,6 @@ def bookings():
 def travel(newTransport_id):
 	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
 	if request.method == 'POST':
-		#newTransport = TransportBooking()
-		#newTransport_id = newTransport.booking_id
-		#session.add(newTransport)
-		#session.commit()
 		if request.form['numtickets']:
 			newTransport.num_tickets = request.form['numtickets']
 		if request.form['check_in']:
@@ -164,12 +179,11 @@ def confirmtravel(newTransport_id):
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
 			session.add(travelcomp)
 			itemToDelete = session.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
-			for o in itemToDelete:
-				session.delete(o)
+			session.delete(itemToDelete)
 			session.commit()
-			return redirect(url_for('index'))
+			return redirect(url_for('trips'))
 		elif request.form['action'] == 'Confirm':
-			return redirect(url_for('index'))
+			return redirect(url_for('trips'))
 		elif request.form['action'] == 'Back':
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
 			session.add(travelcomp)
