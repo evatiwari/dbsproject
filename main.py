@@ -85,17 +85,9 @@ def trips():
 			if request.form['action'] == 'Hotel Booking':
 				return redirect(url_for('hotel' , newTransport_id = newTransport.booking_id))
 			if request.form['action'] == 'Transport Booking':
-				newTransport = TransportBooking()
-				newTransport_id = newTransport.booking_id
-				session.add(newTransport)
-				session.commit()
-				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
-			if request.form['action'] == 'Transport Booking':
-				newTransport = TransportBooking()
-				newTransport_id = newTransport.booking_id
-				session.add(newTransport)
-				session.commit()
-				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+				return redirect(url_for('hotel'))
+			if request.form['action'] == 'History':
+				return redirect(url_for('bookings' ))
 		else:
 			return render_template("trips.html")
 
