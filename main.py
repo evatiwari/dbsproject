@@ -21,7 +21,7 @@ cursor = mydb.cursor()
 
 
 DBSession = sessionmaker(bind=engine)
-session = DBSession()
+session1 = DBSession()
 
 @app.route('/' )
 def index():
@@ -62,6 +62,7 @@ def signup():
         return redirect(url_for('login'))
     return render_template("signup.html")
 
+
 @app.route('/user')
 def user():
     if g.user:
@@ -73,28 +74,27 @@ def before_request():
     g.user=None
     if 'user' in session:
         g.user = session['user']
-
 @app.route('/trips', methods= ['POST' , 'GET'])
 def trips():
 		if request.method =='POST':
 			newTrip = Trip()			
-			session.add(newTrip)
-			session.commit()
+			session1.add(newTrip)
+			session1.commit()
 			newTrip_id = newTrip.trip_id
 			if request.form['action'] == 'Transport Booking':
 				newTransport = TransportBooking()				
-				session.add(newTransport)
-				session.commit()
+				session1.add(newTransport)
+				session1.commit()
 				newTransport_id = newTransport.booking_id
 				newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
-				session.add(newTrip)
-				session.commit()
+				session1.add(newTrip)
+				session1.commit()
 				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
 			if request.form['action'] == 'Hotel Booking':
 				return redirect(url_for('hotel' ))
 			if request.form['action'] == 'History':
-				session.delete(newTrip)
-				session.commit()
+				session1.delete(newTrip)
+				session1.commit()
 				return redirect(url_for('bookings' ))
 		else:
 			return render_template("trips.html")
@@ -110,7 +110,7 @@ def bookings():
 
 @app.route('/travel/<int:newTransport_id>', methods =['GET','POST'])
 def travel(newTransport_id):
-	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+	newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
 	if request.method == 'POST':
 		if request.form['name'] == 'Submit':
 			if request.form['numtickets']:
@@ -121,15 +121,15 @@ def travel(newTransport_id):
 				newTransport.to_dest= request.form['to']
 			if request.form['from']:
 				newTransport.from_dest= request.form['from']
-			session.execute(text('update transport_booking set num_tickets= :num, to_dest= :to , from_dest = :fro where booking_id = :idt') , {'num' :newTransport.num_tickets ,'to' : newTransport.to_dest, 'fro' :newTransport.from_dest, 'idt': newTransport.booking_id })
-			session.execute("commit")		
+			session1.execute(text('update transport_booking set num_tickets= :num, to_dest= :to , from_dest = :fro where booking_id = :idt') , {'num' :newTransport.num_tickets ,'to' : newTransport.to_dest, 'fro' :newTransport.from_dest, 'idt': newTransport.booking_id })
+			cursor.execute("commit")		
 			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
 		elif request.form['name'] =='Back to Trip':
-			newTrip = session.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+			newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
 			newTrip.travel_bookingnum = None 
-			session.add(newTrip)
-			session.delete(newTransport)
-			session.commit()
+			session1.add(newTrip)
+			session1.delete(newTransport)
+			cursor.execute("commit")
 			return redirect(url_for('trips' ))
 	else:
 		print("GET method on travelpage1")
@@ -141,37 +141,38 @@ def check():
 
 @app.route('/travelcomp/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def travelcomp(newTransport_id):
-	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-	travelcomp = session.query(TravelCompany)
-	#modes = session.execute('select * from mode')
-	modes = session.query(Mode)
+	newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+	travelcomp = session1.query(TravelCompany)
+	#modes = session1.execute('select * from mode')
+	modes = session1.query(Mode)
 	if request.method == 'POST':
 		#if request.form['name']:
 		if request.form['action'] == "Submit" :
 			print('The form has data, we can proceed')
 			newTransport.travel_id = request.form['options']
-			chosenTravel = session.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+			#chosenTravel = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+			chosenTravel = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
 			newTransport.travel_mode = chosenTravel.mode_id
 			if chosenTravel.mode_id >300 :
 				newTransport.arrival_date = newTransport.depart_date + datetime.timedelta( days = 2 ,hours=5, minutes=13)
 			else:
 				newTransport.arrival_date = newTransport.depart_date + datetime.timedelta( days = 1 ,hours=2, minutes=10)
-			#price = session.execute(text('select price from mode where mode.mode_id = :ii'),{'ii': request.form['options'] })
-			price = session.query(Mode).filter_by(mode_id = chosenTravel.mode_id).one()
+			#price = session1.execute(text('select price from mode where mode.mode_id = :ii'),{'ii': request.form['options'] })
+			price = session1.query(Mode).filter_by(mode_id = chosenTravel.mode_id).one()
 			newTransport.totprice = newTransport.num_tickets *price.price
 			chosenTravel.num_tickets = chosenTravel.num_tickets - newTransport.num_tickets
-			session.add(newTransport)
-			session.execute(text("update travel_company set num_tickets= :num where travel_company.travel_id = :idf"),{'num' :chosenTravel.num_tickets,'idf' : newTransport.travel_id})
-			session.commit()
+			session1.add(newTransport)
+			session1.execute(text("update travel_company set num_tickets= :num where travel_company.travel_id = :idf"),{'num' :chosenTravel.num_tickets,'idf' : newTransport.travel_id})
+			session1.commit()
 			cursor.execute("commit")
 			return redirect(url_for('confirmtravel', newTransport_id = newTransport_id))
 		elif request.form['action'] == 'All':
 			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )
 		elif request.form['action'] == 'Flights':
-			travelcomp = session.query(TravelCompany).filter( TravelCompany.mode_id  < 300)
+			travelcomp = session1.query(TravelCompany).filter( TravelCompany.mode_id  < 300)
 			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )
 		elif request.form['action'] == 'Trains':
-			travelcomp = session.query(TravelCompany).filter(TravelCompany.mode_id  >= 300)
+			travelcomp = session1.query(TravelCompany).filter(TravelCompany.mode_id  >= 300)
 			return render_template("displaytravel.html" , travelcomp= travelcomp , newTransport = newTransport , mode = modes )	
 			
 	else:
@@ -179,26 +180,26 @@ def travelcomp(newTransport_id):
 
 @app.route('/confirmtravel/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def confirmtravel(newTransport_id):
-	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-	travelcomp = session.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
-	modes = session.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
+	newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+	travelcomp = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+	modes = session1.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
 	if request.method=='POST':
 		if request.form['action'] == 'Delete':
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session.add(travelcomp)
-			itemToDelete = session.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
-			newTrip = session.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+			session1.add(travelcomp)
+			itemToDelete = session1.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
+			newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
 			newTrip.travel_bookingnum = None 
-			session.add(newTrip)
-			session.delete(itemToDelete)
-			session.commit()
+			session1.add(newTrip)
+			session1.delete(itemToDelete)
+			session1.commit()
 			return redirect(url_for('trips'))
 		elif request.form['action'] == 'Confirm':
 			return redirect(url_for('trips'))
 		elif request.form['action'] == 'Back':
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session.add(travelcomp)
-			session.commit()
+			session1.add(travelcomp)
+			session1.commit()
 			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
 	else:
 		return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
