@@ -104,17 +104,22 @@ def bookings():
 def travel(newTransport_id):
 	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
 	if request.method == 'POST':
-		if request.form['numtickets']:
-			newTransport.num_tickets = request.form['numtickets']
-		if request.form['check_in']:
-			newTransport.depart_date=request.form['check_in']
-		if request.form['to']:
-			newTransport.to_dest= request.form['to']
-		if request.form['from']:
-			newTransport.from_dest= request.form['from']
-		session.execute(text('update transport_booking set num_tickets= :num, to_dest= :to , from_dest = :fro where booking_id = :idt') , {'num' :newTransport.num_tickets ,'to' : newTransport.to_dest, 'fro' :newTransport.from_dest, 'idt': newTransport.booking_id })
-		session.execute("commit")		
-		return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
+		if request.form['name'] == 'Submit':
+			if request.form['numtickets']:
+				newTransport.num_tickets = request.form['numtickets']
+			if request.form['check_in']:
+				newTransport.depart_date=request.form['check_in']
+			if request.form['to']:
+				newTransport.to_dest= request.form['to']
+			if request.form['from']:
+				newTransport.from_dest= request.form['from']
+			session.execute(text('update transport_booking set num_tickets= :num, to_dest= :to , from_dest = :fro where booking_id = :idt') , {'num' :newTransport.num_tickets ,'to' : newTransport.to_dest, 'fro' :newTransport.from_dest, 'idt': newTransport.booking_id })
+			session.execute("commit")		
+			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
+		elif request.form['name'] =='Back to Trip':
+			session.delete(newTransport)
+			session.commit()
+			return redirect(url_for('trips' ))
 	else:
 		print("GET method on travelpage1")
 		return render_template('travelpage1.html' , newTransport_id= newTransport_id )
