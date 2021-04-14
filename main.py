@@ -16,15 +16,12 @@ mydb = mysql.connector.connect(host="localhost", user="travel", password="dbmspr
 app.secret_key = "maynardjameskeenan"
 cursor = mydb.cursor()
 
-<<<<<<< HEAD
+
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-@app.route('/' ,methods =['GET' , 'POST'] )
-=======
-@app.route('/' )
->>>>>>> d0834a74b1964ef8a74d919431a18323e648a2dc
+@app.route('/index' ,methods =['GET' , 'POST'] )
 def index():
 	
 	if request.method =='POST':
@@ -91,15 +88,10 @@ def hotel():
 def bookings():
     return render_template("bookings.html")
 
-<<<<<<< HEAD
+
 @app.route('/travel/<int:newTransport_id>', methods =['GET','POST'])
 def travel(newTransport_id):
 	newTransport = session.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-=======
-
-@app.route('/travel', methods =['GET','POST'])
-def travel():
->>>>>>> d0834a74b1964ef8a74d919431a18323e648a2dc
 	if request.method == 'POST':
 		#newTransport = TransportBooking()
 		#newTransport_id = newTransport.booking_id
@@ -114,7 +106,7 @@ def travel():
 		if request.form['from']:
 			newTransport.from_dest= request.form['from']
 		session.execute(text('update transport_booking set num_tickets= :num, to_dest= :to , from_dest = :fro where booking_id = :idt') , {'num' :newTransport.num_tickets ,'to' : newTransport.to_dest, 'fro' :newTransport.from_dest, 'idt': newTransport.booking_id })
-		cursor.execute("commit")		
+		session.execute("commit")		
 		return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
 	else:
 		print("GET method on travelpage1")
@@ -172,7 +164,8 @@ def confirmtravel(newTransport_id):
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
 			session.add(travelcomp)
 			itemToDelete = session.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
-			session.delete(itemToDelete)
+			for o in itemToDelete:
+				session.delete(o)
 			session.commit()
 			return redirect(url_for('index'))
 		elif request.form['action'] == 'Confirm':
