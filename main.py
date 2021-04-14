@@ -61,6 +61,7 @@ def signup():
         cursor.execute("COMMIT")
         return redirect(url_for('login'))
     return render_template("signup.html")
+
 @app.route('/user')
 def user():
     if g.user:
@@ -76,17 +77,24 @@ def before_request():
 @app.route('/trips', methods= ['POST' , 'GET'])
 def trips():
 		if request.method =='POST':
+			newTrip = Trip()			
+			session.add(newTrip)
+			session.commit()
+			newTrip_id = newTrip.trip_id
 			if request.form['action'] == 'Transport Booking':
-				newTransport = TransportBooking()
-				newTransport_id = newTransport.booking_id
+				newTransport = TransportBooking()				
 				session.add(newTransport)
+				session.commit()
+				newTransport_id = newTransport.booking_id
+				newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
+				session.add(newTrip)
 				session.commit()
 				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
 			if request.form['action'] == 'Hotel Booking':
-				return redirect(url_for('hotel' , newTransport_id = newTransport.booking_id))
-			if request.form['action'] == 'Transport Booking':
-				return redirect(url_for('hotel'))
+				return redirect(url_for('hotel' ))
 			if request.form['action'] == 'History':
+				session.delete(newTrip)
+				session.commit()
 				return redirect(url_for('bookings' ))
 		else:
 			return render_template("trips.html")
@@ -117,6 +125,9 @@ def travel(newTransport_id):
 			session.execute("commit")		
 			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
 		elif request.form['name'] =='Back to Trip':
+			newTrip = session.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+			newTrip.travel_bookingnum = None 
+			session.add(newTrip)
 			session.delete(newTransport)
 			session.commit()
 			return redirect(url_for('trips' ))
@@ -176,6 +187,9 @@ def confirmtravel(newTransport_id):
 			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
 			session.add(travelcomp)
 			itemToDelete = session.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
+			newTrip = session.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+			newTrip.travel_bookingnum = None 
+			session.add(newTrip)
 			session.delete(itemToDelete)
 			session.commit()
 			return redirect(url_for('trips'))
