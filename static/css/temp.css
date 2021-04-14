@@ -51,10 +51,21 @@ body {
     background-repeat: no-repeat;
     background-position: top;
     background-attachment: fixed;
-
-   
-
 }
+.card-header-darker {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(111,66,187, 0.5);
+  border-color: : 1px solid rgba(0, 0, 0, 0.125);
+}  
+.card-header-darker:first-child {
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+}
+
+.card-header-darker + .list-group .list-group-item:first-child {
+  border-top: 0;
+}
+
 .text-font {
   font-family:'Bravo', sans-serif !important;
   
@@ -533,6 +544,12 @@ body {
   color: #212529;
   background-color:#B19CC6 ;
   border-color:#B19CC6;
+}
+.btn-darkviolet:hover{
+  color: #212529;
+  background-color:#b39bc8 ;
+  border-color:#b39bc8;
+
 }
 .btn-peach{
    color: #212529;
@@ -1280,11 +1297,7 @@ body {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
-.jumbotron{
-  background-color: transparent;
-  color:#123c65;
-  position:absolute;
-}
+
 @media screen and (max-width: 991px) {
   .sidebar {
     position: fixed;
@@ -1659,4 +1672,11 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .a-button:hover {
   color: #ffd !important;
 }
+
+.jumbotron {
+  margin: 0px auto;
+  padding: 70px 30px;
+  background: #9575CD;
+  color: floralwhite; }
+
 

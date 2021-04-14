@@ -5,20 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
-  
+  	 <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
     <title>Travel Planning Step 1</title>
 </head>
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
+	<p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
     <div align="col-4 mx-auto">
-    	<div class ="card card-transparent">
-    		<h4 class= "class-header" align ="center">Please enter the following information for:</h4>
+    		<h4  align ="center">Please enter the following information for:</h4>
+    	<div class ="card card-transparent">    	
     		<div class ="card-body">
-    			<form action="{{url_for('travel')}}" method ='POST'>
+    			<form action="{{url_for('travel' , newTransport_id = newTransport_id)}}" method ='POST'>
 		            <table align="center">
 		            	<tr>
 		                    <td >Number of tickets:</td>
-		                    <td ><input type="Number" placeholder="Number of rooms" min = 0 name='numtickets'></td>
+		                    <td ><input type="Number" placeholder="Number of tickets" min = 0 name='numtickets'></td>
 		                </tr>
 		                <tr>
 		                    <td>Date of Travel:</td>
@@ -35,7 +36,7 @@
 		                <tr>
 		                	<br><br>
 		                </tr>
-		                <tr><td><input type="submit" class ="btn-purple btn text-white" value = "Submit"/ ></td></tr>
+		                <tr> <td><input type="submit" class ="btn-rose2 btn text-white" value = "Back to Trip" name= 'name' ></td><td><input type="submit" name = 'name'class ="btn-purple btn text-white" value = "Submit"/ ></td></tr>
 		            </table>
 		        </form>
 		       

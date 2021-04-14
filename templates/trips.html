@@ -2,12 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/trips.css') }}">
-    <title>Document</title>
+    <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+ 	 <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <title>Home Page</title>
 </head>
-<body>
-    Trips page
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+	<p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+	<p align="center">
+		<h1 align="center">Oh Nooo Bookings</h1>
+	</p>
+	<br><br><br>
+	<form action="{{url_for('trips')}}" method ="POST">
+		<p align ="center">
+ <input type="submit" value="Hotel Booking" name="action"  class ="btn-purple btn text-white" ><br><br>
+ <input type="submit" value="Transport Booking" name="action"  class ="btn-darkviolet btn text-white" ><br><br>
+ <input type="submit" value="History" name="action"  class ="btn-darkblue btn text-white" ><br><br>
+
+</p>
+</form>
+ <script type="text/javascript" src="{{url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.js')}}"></script>
 </body>
 </html>
