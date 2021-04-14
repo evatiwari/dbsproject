@@ -1,0 +1,28 @@
+body{
+    background-color: white;
+}
+h2{
+    margin-top: 50px;
+    text-align: center;
+}
+.container {
+    background-color: #C3E0E5;
+    width: 300px;
+    border: 5px ridge #5885AF;
+    padding: 50px;
+    margin-top: 50px;
+    margin-left: 410px;
+    align-self: center;
+    border-radius: 10px;
+  }
+  .submit_btn{
+    border: seashell;
+    background-color:#274472;
+    border-radius: 5px;
+    height: 28px;
+    text-align: center;
+    color: honeydew;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-top: 20px;
+    margin-left: 100px;
+  } 

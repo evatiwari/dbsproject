@@ -71,7 +71,60 @@ def before_request():
 
 @app.route('/hotel')
 def hotel():
-    return render_template("hotel.html")
+    mydb = mysql.connector.connect( host="localhost",user="travel",password="dbmsproject",database="sqlalchemy")
+    mycursor = mydb.cursor()
+    sql="SELECT hotel_name,hotel_id,hotel_city,hotel_contact FROM hotel"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    final=[]
+    for i in myresult:
+        s=str(i)
+        s = s[1:-1]
+        l=s.split(",")
+
+        s =l[0][1:-1]+","+l[1]+",images/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
+        final.append(tuple(s.split(",")))
+    return render_template("hotel_display.html",items=final)
+
+@app.route('/hotel_filter/')
+def hotel_filter():
+    mydb = mysql.connector.connect( host="localhost",user="travel",password="dbmsproject",database="sqlalchemy")
+    mycursor = mydb.cursor()
+    sql="SELECT hotel_name,hotel_id,hotel_city,hotel_contact FROM hotel ORDER BY hotel_city"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    final=[]
+    for i in myresult:
+        s=str(i)
+        s = s[1:-1]
+        l=s.split(",")
+        s =l[0][1:-1]+","+l[1]+",images/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
+        final.append(tuple(s.split(",")))
+    return render_template("hotel_display.html",items=final)
+
+@app.route('/hotel/<id>/')
+def hotel_info(id):
+    mydb = mysql.connector.connect( host="localhost",user="swd",password="swd123",database="sqlalchemy")
+    mycursor = mydb.cursor()
+    sql="SELECT hotel_name,hotel_id,hotel_addr,hotel_contact,hotel_num_room FROM hotel "+"WHERE hotel_id="+str(id)
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    return render_template("hotel_info.html",items=myresult)
+
+@app.route('/cico/', methods = ['GET', 'POST'])  
+def check_in_check_out():
+    # return render_template("check_in_check_out.html")
+    if request.method=='POST':
+        ci_date=request.form['check_in']
+        co_date=request.form['check_out']
+        mydb = mysql.connector.connect( host="localhost",user="swd",password="swd123",database="sqlalchemy")
+        mycursor = mydb.cursor()
+        # sql="UPDATE hotel_booking SET check_in='2000-12-23', check_out='2000-12-27' WHERE booking_id=201"
+        sql="UPDATE hotel_booking SET check_in= '"+str(ci_date)+"', check_out='"+str(co_date)+"' WHERE booking_id=201"
+        mycursor.execute(sql)
+        mydb.commit()
+        return hotel()
+    return render_template("check_in_check_out.html")    
 
 @app.route('/bookings')
 def bookings():
