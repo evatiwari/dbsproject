@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/check_in_check_out.css') }}">
+    <title>checkin_checkout</title>
+</head>
+<body>
+    <h2>Please Enter your Check-In and Check-Out dates</h2>
+        <!-- <form>
+            <table>
+                <tr>
+                    <td>CHECK IN:</td>
+                    <td><input type="text" placeholder="DD-MONTH-YYYY" name="check_in"></td>
+                </tr>
+                <tr>
+                    <td>CHECK OUT:</td>
+                    <td><input type="text" placeholder="DD-MONTH-YYYY" name="check_out"></td>
+                </tr>
+            </table>
+        </form> -->
+        <!-- <form action="{{url_for('check_in_check_out')}}" method="POST"> -->
+        <form  method="POST" >
+            <div  class="container">
+                <label>CHECK IN: </label>
+                <input type="text" id="check_in_id" name="check_in" placeholder="YYYY-MM-DD"><br><br>
+                <label >CHECK OUT:  </label>
+                <input type="text" id="check_out_id" name="check_out" placeholder="YYYY-MM-DD"><br><br>
+                <input  class="submit_btn" type="submit" value="Continue">
+            </div>
+          </form> 
+</body>
+</html>

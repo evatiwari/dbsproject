@@ -61,7 +61,7 @@ class Hotel(Base):
 	hotel_name = Column(String(80), nullable = False)
 	hotel_id = Column(Integer, primary_key = True)
 	hotel_addr= Column(String(250))
-	hotel_contact = Column(BigInteger)
+	hotel_contact = Column(String(10), nullable = False)
 	hotel_num_room = Column(Integer)
 	
 class HotelA(Base):
@@ -80,8 +80,7 @@ class HotelBooking(Base) :
 	check_out = Column(DateTime)
 	hotel = relationship(Hotel)
 
-
-engine =create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
+print("Successful")
+engine =create_engine('mysql+mysqlconnector://swd:swd123@localhost:3306/sqlalchemy',echo=True)
 Base.metadata.create_all(engine)
 
-#print("Successful")

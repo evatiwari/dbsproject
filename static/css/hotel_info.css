@@ -1,0 +1,17 @@
+.table_info {
+    background-color: #C3E0E5;
+    width: 500px;
+    border: 5px ridge #274472;
+    padding: 50px;
+    margin-top: 30px;
+    margin-left: 400px;
+    align-self: center;
+    border-radius: 10px;
+  }
+  h2{
+      margin-top: 20px;
+      text-align: center;
+  }
+  body{
+      background-color: #41729F;
+  }
