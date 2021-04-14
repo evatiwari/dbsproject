@@ -68,7 +68,7 @@ class Hotel(Base):
 	hotel_id = Column(Integer, primary_key = True)
 	hotel_lane= Column(String(250))
 	hotel_city= Column(String(250))
-	hotel_contact = Column(BigInteger)
+	hotel_contact = Column(String(10), nullable = False)
 	hotel_num_room = Column(Integer)
 	
 class HotelA(Base):
