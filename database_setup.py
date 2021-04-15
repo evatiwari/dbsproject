@@ -66,7 +66,7 @@ class Hotel(Base):
 	__tablename__ = 'hotel'
 	hotel_name = Column(String(80), nullable = False)
 	hotel_id = Column(Integer, primary_key = True)
-	hotel_lane= Column(String(250))
+	hotel_addr= Column(String(250))
 	hotel_city= Column(String(250))
 	hotel_contact = Column(BigInteger)
 	hotel_num_room = Column(Integer)
@@ -87,6 +87,7 @@ class HotelBooking(Base) :
 	check_out = Column(DateTime)
 	num_rooms = Column(Integer) #number of rooms for the user
 	room_type = Column(Integer, ForeignKey('room.type_id'))
+	totprice = Column(Integer)
 	hotel = relationship(Hotel)
 	room = relationship(Room)
 

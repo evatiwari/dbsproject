@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+     <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+  
+        <title> Hotel Booking Page 3</title>
+        <!-- <link rel="stylesheet" href="Conf_CSS.css"> -->
+
+        
+    </head>
+
+   <body background="{{ url_for('static', filename='img/background.jpg') }}">
+    <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+        <div class="Box1">
+           
+            <h4 align="center">Hotel Details : Confirmation</h4>
+            <p align="center">
+            Please check the below details and click "confirm" to make the booking. To make changes, click "back".    
+            </p>
+            
+
+            
+        <div class="card">
+          <div class="card-body">
+                <table align="center">
+                   <tr class="card-header">
+                       <th>Particulars</th>
+                       <th>Choice</th>
+                   </tr>
+                   <tr>
+                       <td>Hotel Name</td>
+                       <td> {{hotelDet.hotel_name}}</td>
+                   </tr>
+                   <tr>
+                       <td>City</td>
+                       <td> {{hotelDet.hotel_city}}</td>
+                   </tr>
+                   <tr>
+                       <td>Lane</td>
+                       <td> {{hotelDet.hotel_lane}}</td>
+                   </tr>
+                   <tr>
+                       <td>Contact</td>
+                       <td> {{hotelDet.hotel_contact}}</td>
+                   </tr>
+                   <tr>
+                       <td> Check-in Date</td>
+                       <td> {{newHotel.check_in}}</td>
+                   </tr>
+
+                    <tr>
+                    <td> Check-out Date</td>
+                    <td> {{newHotel.check_out}}</td>
+                    </tr>
+
+
+                    <tr>
+                    <td> Type Of Room</td>
+                    <td> {{roomType.room_type}}</td>
+                    </tr>
+
+                    <tr>
+                    <td> Number of Rooms</td>
+                    <td> {{newHotel.num_rooms}}</td>
+                    </tr>
+
+                    <tr>
+                    <td> Total Price</td>
+                    <td> {{newHotel.totprice}}</td>
+                    </tr>
+                  
+
+                </table>
+
+</div>
+<div class="card-footer">
+            <form action = "{{url_for('Confirmation', id =newHotel.booking_id ) }}" class = "MyForm" method ='POST'>
+              <p align="center">
+              <input type = "submit" name="action" value = "Confirm" class="button button1">
+              <input type ="submit" name="action" value ="Back" class="button button3">
+              <input type="submit" name = "action" value ="Delete" class="button button2">
+                <!--
+                <button class="button button1">Confirm</button>
+                <button class="button button2">Back</button>
+              -->
+</p>            </form>
+</div></div>
+        </div>
+    </body>
+
+    <footer>
+        <p align="center">
+        <h5>To know more about our big cities, click here: </h5> <br>
+        <a class="btn btn-darkblue text-white "href="https://www.thrillophilia.com/places-to-visit-in-chennai" target="_blank">Chennai </a>
+        &emsp;
+        <a class="btn btn-darkblue text-white "href="https://www.wbtourismgov.in/home/kolkata" target="_blank">Kolkata</a>
+        &emsp;
+        <a class="btn btn-darkblue text-white " href="https://www.fabhotels.com/blog/places-to-visit-in-mumbai/" target="_blank">Mumbai</a>
+        &emsp;
+        <a class="btn btn-darkblue text-white " href="https://www.tourmyindia.com/states/delhi/" target="_blank">Delhi</a>
+        &emsp;
+        <a class="btn btn-darkblue text-white " href="https://www.thrillophilia.com/destinations/bangalore/places-to-visit" target="_blank">Banglore</a>
+        &emsp;
+        <a class="btn btn-darkblue text-white " href="https://www.hyderabadtourism.travel/places-to-visit-in-hyderabad" target="_blank">Hyderabad</a>
+      </p>
+    </footer>
+</html>
