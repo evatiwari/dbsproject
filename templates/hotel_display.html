@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_display.css') }}">
+    <title>Hotel_Display</title>
+</head>
+<body>
+    <h1>Select a hotel of your choice</h1>
+    <form  action="POST" >
+        <button class="filter"><a  href='{{url_for('hotel_filter') }}' >Filter by cities</a></button>
+    </form>
+    {% for i in items %}
+    <!-- <h1>{{i}}</h1> -->
+    <!-- <button>{{i[0]}}</button> -->
+    <div class="card_hotel">
+        <table>
+            <tr>
+                <td>
+                    <div class="image_hotel">
+                        <img src="{{ url_for('static', filename=i[2]) }}" alt="no picture">
+                    </div>
+                    <!-- <script type="text/javascript" >
+                        var id=401;
+                        document.getElementById(401).src = "/static/css/" + id+ ".jpg";
+                    </script> -->
+                </td>
+                <td>
+                    <div class="title_hotel">
+                        <h2 class="h_t">{{i[0]}}</h2>
+                    </div>
+                    <div class="desc_hotel">
+                        <h3>{{i[3]}}</h3>
+                        <p>contact: {{i[4]}} </p>
+                        <!-- <p>{{i[4]}}</p> -->
+                        <form  action="POST" >
+                            <a href='{{url_for('hotel_info', id=i[1]) }}'>Show More</a>
+                            <!-- <input type="submit" value="{{i[0]}}" name="h_id"> -->
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    <br/>
+    <br/>
+    {%endfor%}
+</body>
+</html> 

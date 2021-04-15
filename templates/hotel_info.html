@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_info.css') }}">
+    <title>Hotel_info</title>
+</head>
+<body>
+
+      <table class="table_info">
+        {% for i in items %}
+        <h2>{{i[0]}}</h2>
+          <tr>
+              <td><label>HOTEL ADDRESS : </label></td>
+              <td><label><p>{{i[2]}}</p></label></td>
+          </tr>
+          <tr>
+            <td><label>CONTACT INFO : </label></td>
+            <td><label><p>{{i[3]}}</p></label></td>
+        </tr>
+        <tr>
+            <td><label>ROOMS AVAILABLE : </label></td>
+            <td><label><p>{{i[4]}}</p></label></td>
+            {%endfor%}
+        </tr>
+
+      </table>
+
+
+</body>
+</html> 
