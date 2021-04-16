@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
+     <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/check_in_check_out.css') }}">
-    <title>checkin_checkout</title>
+    <title>Hotel Booking Stage 1: Dates</title>
 </head>
-<body>
-    <h2>Please Enter your Check-In and Check-Out dates</h2>
-        <!-- <form>
-            <table>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+    <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+    <div align="col-4 mx-auto">
+    <h4 align="center">Please Enter your Check-In and Check-Out dates</h4>
+     <div class ="card card-transparent">       
+            <div class ="card-body">
+        <form  method="POST" action="{{url_for('check_in_check_out' ,newHotel_id = newHotel_id)}} ">
+            <table align="center">
+                        <tr>
+                <td>CHECK IN: </td>
+                <td><input type="text" id="check_in_id" name="check_in" placeholder="YYYY-MM-DD"></td></tr>
+                <tr><td>CHECK OUT:  </td><td>
+                <input type="text" id="check_out_id" name="check_out" placeholder="YYYY-MM-DD"></td></tr>
+                <br>
                 <tr>
-                    <td>CHECK IN:</td>
-                    <td><input type="text" placeholder="DD-MONTH-YYYY" name="check_in"></td>
-                </tr>
-                <tr>
-                    <td>CHECK OUT:</td>
-                    <td><input type="text" placeholder="DD-MONTH-YYYY" name="check_out"></td>
-                </tr>
-            </table>
-        </form> -->
-        <!-- <form action="{{url_for('check_in_check_out')}}" method="POST"> -->
-        <form  method="POST" >
-            <div  class="container">
-                <label>CHECK IN: </label>
-                <input type="text" id="check_in_id" name="check_in" placeholder="YYYY-MM-DD"><br><br>
-                <label >CHECK OUT:  </label>
-                <input type="text" id="check_out_id" name="check_out" placeholder="YYYY-MM-DD"><br><br>
-                <input  class="submit_btn" type="submit" value="Continue">
+                    <td><input type="submit" class ="btn-rose2 btn text-white" value = "Back to Trip" name= 'name' ></td>
+                <td><input  class="btn btn-darkblue text-white" name='name' type="submit" value="Continue"></td></tr>
             </div>
           </form> 
 </body>

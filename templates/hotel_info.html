@@ -4,30 +4,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_info.css') }}">
-    <title>Hotel_info</title>
-</head>
-<body>
 
-      <table class="table_info">
-        {% for i in items %}
-        <h2>{{i[0]}}</h2>
+    <title>{{items[0][0]}} Hotel Information</title>
+    <style type="text/css">
+      td {
+  padding: 10px 10px;
+  
+}
+    </style>
+</head>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+  <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+{% for i in items %}
+        <h4 align="center">{{i[0]}}</h4>
+        <br><br>
+        <p align="center">
+      <table align ="center" class="table_info" >
+        
           <tr>
-              <td><label>HOTEL ADDRESS : </label></td>
-              <td><label><p>{{i[2]}}</p></label></td>
+              <td><b>Hotel Address: </b></td>
+              <td>{{i[2]}}</td>
           </tr>
+          <tr></tr>
           <tr>
-            <td><label>CONTACT INFO : </label></td>
-            <td><label><p>{{i[3]}}</p></label></td>
+            <td><b>Contact Details: </b></td>
+            <td>{{i[3]}}</td>
         </tr>
+        <tr></tr>
         <tr>
-            <td><label>ROOMS AVAILABLE : </label></td>
-            <td><label><p>{{i[4]}}</p></label></td>
-            {%endfor%}
+            <td><b>Rooms Available: </b></td>
+            <td>{{i[4]}}</td>
+            
         </tr>
 
       </table>
 
-
+</p>
+<form method="POST" action="{{ url_for('hotel_info', hotelid=i[1] , id = id) }}">
+  <p align="center">
+  <input class="btn btn-jasmine text-white" type="submit" name="action" value="Back">
+ 
+  <input class="btn btn-rose2 text-white" type="submit" name="action" value="Choose this Hotel">
+</p>
+</form> 
+{%endfor%}
 </body>
 </html> 

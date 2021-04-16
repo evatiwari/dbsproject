@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <title>Hotel Planning Step 3: Room Selection</title>
+<style type="text/css">
+      td {
+  padding: 10px 10px;
+  
+}
+    </style>
+        
+    </head>
+
+    <body  background="{{ url_for('static', filename='img/background.jpg') }}">
+        <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+        <div class="Box1">
+            
+            <h4 align ="center">Room Details</h4>
+            <p align ="center">
+            Choose the room of your choice.
+            Click on "Submit" to go to the Confirmation Page. To make changes, click "Back".
+            </p>
+<p align="center">
+            <form class = "MyForm" method="POST" action="{{url_for('room_det' ,id = id)}}">
+
+                <div class="form-group" align="center">
+                    <label>How many rooms do you want? </label>
+                    <input type="number" min =0 placeholder="Number of rooms" name="num">
+                </div>
+
+                <div class="form-group" type="list" align="center">
+                    <label>What type of room would you prefer?</label>
+                    <select id="rooms" name="rooms" size="1">
+                        <option value="Single">Single</option>
+                        <option value="Double">Double</option>
+                        <option value="Triple">Triple</option>
+                        <option value="Quad">Quad</option>
+                        <option value="King">King Sized</option>
+                        <option value="Queen">Queen Sized</option>
+                        <option value="Twin">Twin</option>
+                        <option value="Adjacent">Adjacent</option>
+                        <option value="Adjoin">Adjoining</option>
+                        <option value="Connecting">Connecting</option>
+                    </select>
+                </div>
+                <br>
+                <br>
+
+                <!--
+                    <a href="file:///D:/Academics/BITS/CS/Data%20Base%20Systems%20(DBS)/Project/HTML%20Practice/Confirmation.html">
+                    <button class="button button1">Next</button></a>
+
+                <button class="button button2">Back</button>
+                -->
+
+
+
+
+
+                <p align="center">
+                <input type ="submit" name ="action" value="Back" class="btn btn-rose text-white">
+                <input type = "submit" name="action" value="Submit" class="btn btn-darkviolet text-white" >
+            </p>
+
+
+                <br>
+                <br>
+
+            </form>
+</p>
+
+        </div>
+    
+
+         <table align ="center">
+            <h5 align="center"> Price Chart </h5>
+            <tr>
+                <th>Type Of Room</th>
+                <th>Cost per Day (in Rupees)</th>
+            </tr>
+            <tr>
+                <td>Single Room</td>
+                <td> 5000</td>
+            </tr>
+            <tr>
+                <td>Double Room </td>
+                <td> 10000</td>
+            </tr>
+            <tr>
+                <td>Triple Room </td>
+                <td> 15000</td>
+            </tr>
+            <tr>
+                <td> Quad Room</td>
+                <td> 20000</td>
+            </tr>
+            <tr>
+                <td> Queen Sized</td>
+                <td> 25000</td>
+            </tr>
+            <tr>
+                <td> King Sized</td>
+                <td> 27000</td>
+            </tr>
+            <tr>
+                <td> Twin Rooms</td>
+                <td>30000 </td>
+            </tr>
+            <tr>
+                <td>Adjacent rooms </td>
+                <td>35000 </td>
+            </tr>
+            <tr>
+                <td> Adjoining Rooms</td>
+                <td> 40000</td>
+            </tr>
+            <tr>
+                <td> Connecting Rooms</td>
+                <td> 50000</td>
+            </tr>
+         </table>
+
+    </body>
+
+    <br>
+    <br>
+    <footer class="jumbotron-blue">
+        <h5 align="center">To get an idea of how our rooms look, click here: </h5>
+        <p align="center ">
+       <a href="{{url_for('static' , filename='img/Single_Room.jpg')}}"class="btn btn-darkblue text-white " target="_blank">Single Room</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Double_Room.jpg') }}"class="btn btn-darkblue text-white " target="_blank">Double Room</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Triple_Room.jpg') }}" class="btn btn-darkblue text-white "target="_blank">Triple Room</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Quad_Room.png') }}" class="btn btn-darkblue text-white "target="_blank">Quad Room</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/King.jpg') }}" class="btn btn-darkblue text-white "target="_blank">King Sized</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Queen.jpg') }}"class="text-black" target="_blank"> Queen Sized </a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Twin.jpg') }}" class="btn btn-darkblue text-white "target="_blank">Twin Rooms</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Adjacent.jpg') }}" class="btn btn-darkblue text-white "target="_blank"> Adjacent</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Adjoining.jpg') }}"class="btn btn-darkblue text-white "target="_blank">Adjoining</a>
+        &emsp;
+        <a href="{{ url_for('static', filename='img/Connecting.jpg') }}" class="btn btn-darkblue text-white "target="_blank">Connecting</a>
+    </p>
+    </footer>
+</html>

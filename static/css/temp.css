@@ -16,7 +16,7 @@
 .jumbotron {
   margin: 0px auto;
   padding: 70px 30px;
-  background: #9575CD;
+  background: transparent;
   color: floralwhite; }
 
 address {
@@ -551,6 +551,11 @@ body {
   border-color:#b39bc8;
 
 }
+.btn-rose:hover{
+   color: #212529;
+  background-color:#ac3b61 ;
+  border-color:#ac3b61;}
+
 .btn-peach{
    color: #212529;
   background-color:#EDC7B7 ;
@@ -1665,6 +1670,9 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .text-white{
   color: floralwhite !important;
 }
+a.text-black{
+  color: #000 !important;
+}
 .a-button {
   color: #fff !important;
   
@@ -1673,10 +1681,10 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   color: #ffd !important;
 }
 
-.jumbotron {
+.jumbotron-blue {
   margin: 0px auto;
   padding: 70px 30px;
-  background: #9575CD;
+  background: #a1c3d1;
   color: floralwhite; }
 
 

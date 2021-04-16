@@ -8,7 +8,7 @@
      <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
   
-        <title> Hotel Booking Page 3</title>
+        <title> Hotel Booking Page 4</title>
         <!-- <link rel="stylesheet" href="Conf_CSS.css"> -->
 
         
@@ -42,7 +42,7 @@
                    </tr>
                    <tr>
                        <td>Lane</td>
-                       <td> {{hotelDet.hotel_lane}}</td>
+                       <td> {{hotelDet.hotel_addr}}</td>
                    </tr>
                    <tr>
                        <td>Contact</td>
@@ -70,7 +70,7 @@
                     </tr>
 
                     <tr>
-                    <td> Total Price</td>
+                    <td> Total Price per Night</td>
                     <td> {{newHotel.totprice}}</td>
                     </tr>
                   
@@ -79,11 +79,12 @@
 
 </div>
 <div class="card-footer">
-            <form action = "{{url_for('Confirmation', id =newHotel.booking_id ) }}" class = "MyForm" method ='POST'>
+            <form action = "{{url_for('room_confirmation', id =newHotel.booking_id ) }}" class = "MyForm" method ='POST'>
               <p align="center">
-              <input type = "submit" name="action" value = "Confirm" class="button button1">
-              <input type ="submit" name="action" value ="Back" class="button button3">
-              <input type="submit" name = "action" value ="Delete" class="button button2">
+              
+              <input type = "submit" name="action" value = "Confirm" class="btn btn-purple text-white"> 
+                <input type ="submit" name="action" value ="Back" class="btn btn-darkviolet text-white">
+                <input type="submit" name = "action" value ="Delete" class="btn btn-danger">
                 <!--
                 <button class="button button1">Confirm</button>
                 <button class="button button2">Back</button>
@@ -95,7 +96,8 @@
 
     <footer>
         <p align="center">
-        <h5>To know more about our big cities, click here: </h5> <br>
+        <h5 align="center">To know more about our big cities, click here: </h5> <br>
+        <p align="center">
         <a class="btn btn-darkblue text-white "href="https://www.thrillophilia.com/places-to-visit-in-chennai" target="_blank">Chennai </a>
         &emsp;
         <a class="btn btn-darkblue text-white "href="https://www.wbtourismgov.in/home/kolkata" target="_blank">Kolkata</a>
@@ -107,6 +109,7 @@
         <a class="btn btn-darkblue text-white " href="https://www.thrillophilia.com/destinations/bangalore/places-to-visit" target="_blank">Banglore</a>
         &emsp;
         <a class="btn btn-darkblue text-white " href="https://www.hyderabadtourism.travel/places-to-visit-in-hyderabad" target="_blank">Hyderabad</a>
+      </p>
       </p>
     </footer>
 </html>

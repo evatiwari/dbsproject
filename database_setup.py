@@ -83,11 +83,11 @@ class HotelBooking(Base) :
 	__tablename__ = 'hotel_booking'
 	booking_id = Column(Integer, primary_key = True)
 	hotel_id = Column(Integer,  ForeignKey('hotel.hotel_id'))
-	check_in = Column(DateTime)
-	check_out = Column(DateTime)
+	check_in = Column(String(10))
+	check_out = Column(String(10))
 	num_rooms = Column(Integer) #number of rooms for the user
 	room_type = Column(Integer, ForeignKey('room.type_id'))
-	totprice = Column(Integer)
+	totprice = Column(BigInteger)
 	hotel = relationship(Hotel)
 	room = relationship(Room)
 

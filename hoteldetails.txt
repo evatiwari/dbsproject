@@ -1,0 +1,13 @@
+COpy paste the hotel details to the sql cmd
+
+
+insert into hotel values('Leela Palace',401,'MRC Nagar, Chennai','Chennai',9876987622,100);
+insert into hotel values('Ashoka Palace',402,'Himayath Nagar,Hyd','Hyderabad',9874567622,60);
+insert into hotel values('ITC Maratha',403,'Ashok Nagar, Andheri East','Mumbai,'8143987622,80);
+insert into hotel values('Hyatt Ahmedabad',404,'Near Vastrapur Lake, Vastrapur','Ahmedabad',8143989898,75);
+insert into hotel values('Radisson Blu Atria',405,'1 Palace Road, Bengaluru','Bangalore',8144990898,100);
+insert into hotel values('IBIS Chennai Sipcot',406,'Old Mahabalipuram Road, Egattur','Chennai',9999987622,120);
+insert into hotel values('Taj Deccan',407,'Road # 1 Banjara Hills','Hyderabad', 9874568772,100);
+insert into hotel values('Sofitel Mumbai BKC',408,'Bandra Kurla Complex, Bandra','Mumbai',8142942295,100);
+insert into hotel values('Holiday Inn Express',409,'Plot No. 38/1, Prahlad Nagar' ,'Ahmedabad',9849694390,70);
+insert into hotel values('Sayaji Indore',410,'Scheme number 54, Vijaynagar','Indore',9977661234,50);
