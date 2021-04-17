@@ -10,7 +10,7 @@
      <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_display.css') }}"> -->
-    <title>Travel_History</title>
+    <title>Travel History</title>
     <style>
         h1{
             text-align: center;
@@ -43,21 +43,22 @@
 </head>
 <!-- tc.travel_name,tc.travel_contact,tb.num_tickets,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price -->
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
-   <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+  
     <h4 align="center">Travel History</h4>
     <div >
         <table class="customers" align="center">
             <tr class="card-header">
               <b>
-                <td>Travel Company</td>
-                <td>Contact</td>
-                <td>No. of tickets</td>
-                <td>Arrival Date</td>
-                <td>Departure Date</td>
-                <td>To </td>
-                <td>From </td>
-                <td>Mode of Transport</td>
-                <td>Price</td>
+                <td align="center">Travel Company</td>
+                <td align="center">Contact</td>
+                <td align="center">No. of tickets</td>
+                
+                <td align="center">Departure Date</td>
+                <td align="center">Arrival Date</td>
+                <td align="center">To </td>
+                <td align="center">From </td>
+                <td align="center">Mode of Transport</td>
+                <td align="center">Price</td>
               </b>
             </tr>
             {% for i in items %}
@@ -65,8 +66,10 @@
                 <td>{{i[0]}}</td>
                 <td>{{i[1]}}</td>
                 <td>{{i[2]}}</td>
-                <td>{{i[3]}}</td>
+                
+
                 <td>{{i[4]}}</td>
+                <td>{{i[3]}}</td>
                 <td>{{i[5]}}</td>
                 <td>{{i[6]}}</td>
                 <td>{{i[7]}}</td>

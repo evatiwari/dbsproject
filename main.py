@@ -376,7 +376,7 @@ def room_confirmation(id):
 @app.route('/hotel_history', methods = ['GET', 'POST'])     #from here 
 def hotel_history():
     #need to make sure hotel name is unique!!!!!
-    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,date(hb.check_in),date(hb.check_out),r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r,hotela ha    where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id and ha.hotela_id=h.hotel_id and ha.room_no=r.type_id and t.user_id= %d;"%newUser.user_id
+    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%newUser.user_id
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':

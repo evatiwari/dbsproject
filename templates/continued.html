@@ -9,7 +9,7 @@
     <title>Trip?</title>
 </head>
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
-    <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+ 
         <div class="Box1">
             <form action="{{url_for('continued' , newTrip_id = trip.trip_id)}}" method ="POST">
             {% if trip.hotel_bookingnum  and trip.travel_bookingnum %}
