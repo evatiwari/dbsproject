@@ -1684,7 +1684,7 @@ a.text-black{
 .jumbotron-blue {
   margin: 0px auto;
   padding: 70px 30px;
-  background: #a1c3d1;
+  opacity: 0 ;
   color: floralwhite; }
 
 
