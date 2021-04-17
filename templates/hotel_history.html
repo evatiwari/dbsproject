@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
+     <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_display.css') }}"> -->
+    <title>Hotel_History</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        .customers {
+          font-family: Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 70%;
+          margin-left: 150px;
+        }
+        
+        .customers td, .customers th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+        
+        .customers tr:nth-child(even){background-color: #f2f2f2;}
+        
+        .customers tr:hover {background-color: #ddd;}
+        
+        .customers th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #4CAF50;
+          color: white;
+        }
+        </style>
+</head>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
+   <p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+    <h4 align="center">Hotel History</h4>
+    <div >
+        <table class="customers" align="center">
+            <tr class="card-header">
+              
+                <td>Hotel Name</td>
+                <td>City</td>
+                <td>Lane</td>
+                <td>Contact</td>
+                <td>Check In</td>
+                <td>Check Out</td>
+                <td>Price</td>
+                <td>Room type</td>
+                <td>Number of Rooms</td>
+
+            </tr>
+            {% for i in items %}
+            <tr>
+                <td>{{i[0]}}</td>
+                <td>{{i[1]}}</td>
+                <td>{{i[2]}}</td>
+                <td>{{i[3]}}</td>
+                <td>{{i[4]}}</td>
+                <td>{{i[5]}}</td>
+                <td>{{i[6]}}</td>
+                <td>{{i[7]}}</td>
+                <td>{{i[8]}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+    <br><br>
+    <div>
+        <form action = "{{url_for('hotel_history')}}" class = "MyForm" method ='POST'>
+            <p align="center">
+            <input type ="submit" name="action" value ="Back" class="btn btn-rosepink text-white">
+            <input type="submit" name = "action" value ="Next" class="btn btn-warning">
+              <!--
+              <button class="button button1">Confirm</button>
+              <button class="button button2">Back</button>
+            -->
+          </form>
+    </div>
+    
+</body>
+</html>

@@ -75,6 +75,8 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
+newUser = session1.query(User).filter_by(user_id=1).one()
+
         
 @app.route('/trips', methods= ['POST' , 'GET'])
 def trips():
@@ -83,6 +85,7 @@ def trips():
         session1.add(newTrip)
         session1.commit()
         newTrip_id = newTrip.trip_id
+        newTrip.user_id = newUser.user_id
         if request.form['action'] == 'Transport Booking':
             newTransport = TransportBooking()
             session1.add(newTransport)
@@ -106,6 +109,10 @@ def trips():
             session1.delete(newTrip)
             session1.commit()
             return redirect(url_for('bookings' ))
+        if request.form['action'] == 'Profile':
+            session1.delete(newTrip)
+            session1.commit()
+            return redirect(url_for('user' ))
     else:
         return render_template("trips.html")
 
@@ -164,6 +171,7 @@ def hotel_info(hotelid, id):
     else:
         return render_template("hotel_info.html",items=myresult ,hotelid = hotelid , id = id)
 
+
 @app.route('/cico/<int:newHotel_id>', methods = ['GET', 'POST'])  
 def check_in_check_out(newHotel_id):
     # return render_template("check_in_check_out.html")
@@ -188,9 +196,17 @@ def check_in_check_out(newHotel_id):
             return redirect(url_for('trips' ))
     return render_template("check_in_check_out.html" , newHotel_id = newHotel_id)    
 
-@app.route('/bookings')
+@app.route('/bookings' ,methods=['GET' ,'POST'])
 def bookings():
-    return render_template("bookings.html")
+    if request.method == 'POST':
+        if request.form['action'] =='Hotel':
+            return redirect(url_for('hotel_history'))
+        elif request.form['action'] =='Transport':
+            return redirect(url_for('travel_history'))
+        elif request.form['action'] =='Back':
+            return redirect(url_for('trips'))
+    else:
+        return render_template("bookings.html")
 
 
 @app.route('/travel/<int:newTransport_id>', methods =['GET','POST'])
@@ -262,29 +278,31 @@ def travelcomp(newTransport_id):
 
 @app.route('/confirmtravel/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def confirmtravel(newTransport_id):
-	newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-	travelcomp = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
-	modes = session1.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
-	if request.method=='POST':
-		if request.form['action'] == 'Delete':
-			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session1.add(travelcomp)
-			itemToDelete = session1.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
-			newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
-			newTrip.travel_bookingnum = None 
-			session1.add(newTrip)
-			session1.delete(itemToDelete)
-			session1.commit()
-			return redirect(url_for('trips'))
-		elif request.form['action'] == 'Confirm':
-			return redirect(url_for('trips'))
-		elif request.form['action'] == 'Back':
-			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session1.add(travelcomp)
-			session1.commit()
-			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
-	else:
-		return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
+    newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+    travelcomp = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+    modes = session1.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
+    if request.method=='POST':
+        if request.form['action'] == 'Delete':
+            travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+            session1.add(travelcomp)
+            itemToDelete = session1.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
+            newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+            newTrip.travel_bookingnum = None 
+            session1.add(newTrip)
+            session1.delete(itemToDelete)
+            session1.commit()
+            return redirect(url_for('trips'))
+        elif request.form['action'] == 'Confirm':
+            newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+            return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
+        elif request.form['action'] == 'Back':
+            travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+            session1.add(travelcomp)
+            session1.commit()
+            return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
+    else:
+        return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
+
 
 @app.route('/logout')
 def logout():
@@ -344,7 +362,8 @@ def room_confirmation(id):
             session1.commit()
             return redirect(url_for('trips'))
         elif request.form['action'] == 'Confirm':
-            return redirect(url_for('trips'))
+            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = id).one()            
+            return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
         elif request.form['action'] == 'Back':
             hotelDet.hotel_num_room = hotelDet.hotel_num_room + newHotel.num_rooms
             session1.add(hotelDet)
@@ -352,6 +371,77 @@ def room_confirmation(id):
             return redirect(url_for('room_det', id = id))
     else:
         return render_template("Confirmationhotel.html", newHotel = newHotel, hotelDet = hotelDet, roomType = roomType)
+
+
+@app.route('/hotel_history', methods = ['GET', 'POST'])     #from here 
+def hotel_history():
+    #need to make sure hotel name is unique!!!!!
+    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,date(hb.check_in),date(hb.check_out),r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r,hotela ha    where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id and ha.hotela_id=h.hotel_id and ha.room_no=r.type_id and t.user_id= %d;"%newUser.user_id
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    if request.method == 'POST':
+        if request.form['action'] == 'Back':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Next':
+            #REDIRECT TO TRAVEL HISTORY
+            return redirect(url_for('travel_history'))
+    else:
+        return render_template("hotel_history.html",items=myresult)
+
+
+@app.route('/travel_history', methods = ['GET', 'POST'])     #from here 
+def travel_history():
+    
+    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%newUser.user_id
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    if request.method == 'POST':
+        if request.form['action'] == 'Back':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Next':
+            return redirect(url_for('hotel_history'))
+    else:
+        return render_template("travel_history.html",items=myresult)
+
+
+
+
+@app.route('/continue/<int:newTrip_id>' , methods=['GET' ,'POST'])
+def continued(newTrip_id):
+    newTrip = session1.query(Trip).filter_by(trip_id = newTrip_id).one()
+    if request.method =='POST':
+        if request.form['action']=='Return':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'No':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Yes':
+            if newTrip.travel_bookingnum == None:
+                newTransport = TransportBooking()
+                session1.add(newTransport)
+                session1.commit()
+                newTransport_id = newTransport.booking_id
+                newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
+                session1.add(newTrip)
+                session1.commit()
+                return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+            if newTrip.hotel_bookingnum == None:
+                newHotel = HotelBooking()
+                session1.add(newHotel)
+                session1.commit()
+                newHotel_id = newHotel.booking_id
+                newTrip.hotel_bookingnum = newHotel_id
+                session1.add(newTrip)
+                session1.commit()
+                return redirect(url_for('check_in_check_out', newHotel_id = newHotel.booking_id))
+            
+    else:
+        return render_template("continued.html" , trip = newTrip )
+
+
+
+
+
+
 if __name__ == '__main__':
 	
 	app.debug=True
