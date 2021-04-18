@@ -1,3 +1,5 @@
+
+  
 .row-header {
   margin: 0px auto;
   padding: 0px 0px; }
@@ -524,12 +526,8 @@ body {
 .offset-11 {
   margin-left: 91.666667%;
 }
-.jaspink {
-  color: #212529;
-  background-color: #e83e8c;
-  border-color: #e83e8c;
-}
-.btn-pink:hover {
+
+.btn-pink {
   color: #212529;
   background-color: #e57685;
   border-color:#e57685;
@@ -586,8 +584,8 @@ body {
 
 }.btn-rosepink{
    color: #212529;
-  background-color:#ac3b61 ;
-  border-color:#ac3b61;
+  background-color:#e57685 ;
+  border-color:#e57685;
 
 }.btn-jasmine{
    color: #212529;
@@ -1686,5 +1684,4 @@ a.text-black{
   padding: 70px 30px;
   opacity: 0 ;
   color: floralwhite; }
-
 
