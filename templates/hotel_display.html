@@ -1,53 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hotel_display.css') }}">
-    <title>Hotel_Display</title>
+        <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <title>Hotel Booking Step 2: Display Hotels</title>
+
 </head>
 <body>
-    <h1>Select a hotel of your choice</h1>
-    <form  action="POST" >
-        <button class="filter"><a  href='{{url_for('hotel_filter') }}' >Filter by cities</a></button>
+    
+    <h4 align ="center">Select a hotel of your choice</h4>
+    <br>
+    <form  action="{{url_for('hotel_filter', id= id) }}" method= "POST" >
+        <p align="center">
+        <input class="btn btn-purple text-white" type='submit' name= "action" value="Filter by Cities" ></p>
     </form>
+    <form  action="{{url_for('hotel', id=id) }}" method= "POST" >
+        <p align="center">
+        <input class="btn btn-darkblue text-white" type='submit' name= "action" value="Back" ></p>
+    </form>
+    <div class="container">
+        <div class="row">
+        <div class="col ">
+    <p >
     {% for i in items %}
     <!-- <h1>{{i}}</h1> -->
     <!-- <button>{{i[0]}}</button> -->
-    <div class="card_hotel">
-        <table>
-            <tr>
-                <td>
-                    <div class="image_hotel">
-                        <img src="{{ url_for('static', filename=i[2]) }}" alt="no picture">
-                    </div>
+    <div class=" card-deck card_hotel">
+          
+                
+                    
+                        <!--img src="{{ url_for('static', filename='img/{{i[1]}}.jpg') }}" alt="{{i[0]}}"-->
+                        <img style="width:200px;height:200px; " src="{{ url_for('static', filename=i[2]) }}" alt="{{i[0]}}">
+               
                     <!-- <script type="text/javascript" >
                         var id=401;
                         document.getElementById(401).src = "/static/css/" + id+ ".jpg";
                     </script> -->
-                </td>
+             <div class="card ">   
+                <table>
                 <td>
-                    <div class="title_hotel">
-                        <h2 class="h_t">{{i[0]}}</h2>
-                    </div>
-                    <div class="desc_hotel">
-                        <h3>{{i[3]}}</h3>
-                        <p>contact: {{i[4]}} </p>
+                <tr>
+                    
+                        <h5 >{{i[0]}}</h5>
+                    </tr>
+                    <tr>
+                        <h6>City: {{i[3]}}</h6></tr>
+                      <tr>  <p><b>Contact:</b> {{i[4]}} </p></tr>
                         <!-- <p>{{i[4]}}</p> -->
-                        <form  action="POST" >
-                            <a href='{{url_for('hotel_info', id=i[1]) }}'>Show More</a>
+                       <tr> <form  action="POST" >
+                            <a href="{{ url_for('hotel_info', hotelid=i[1] , id = id) }}">Show More</a>
                             <!-- <input type="submit" value="{{i[0]}}" name="h_id"> -->
-                        </form>
-                    </div>
+                        </form></tr>
+                
                 </td>
-            </tr>
+            
 
         </table>
+    </div>
     </div>
 
     <br/>
     <br/>
     {%endfor%}
+</p>
+</div>
+</div>
+</div>
 </body>
 </html> 

@@ -1,3 +1,5 @@
+
+  
 .row-header {
   margin: 0px auto;
   padding: 0px 0px; }
@@ -16,7 +18,7 @@
 .jumbotron {
   margin: 0px auto;
   padding: 70px 30px;
-  background: #9575CD;
+  background: transparent;
   color: floralwhite; }
 
 address {
@@ -524,12 +526,8 @@ body {
 .offset-11 {
   margin-left: 91.666667%;
 }
+
 .btn-pink {
-  color: #212529;
-  background-color: #e83e8c;
-  border-color: #e83e8c;
-}
-.btn-pink:hover {
   color: #212529;
   background-color: #e57685;
   border-color:#e57685;
@@ -551,6 +549,11 @@ body {
   border-color:#b39bc8;
 
 }
+.btn-rose:hover{
+   color: #212529;
+  background-color:#ac3b61 ;
+  border-color:#ac3b61;}
+
 .btn-peach{
    color: #212529;
   background-color:#EDC7B7 ;
@@ -581,8 +584,8 @@ body {
 
 }.btn-rosepink{
    color: #212529;
-  background-color:#ac3b61 ;
-  border-color:#ac3b61;
+  background-color:#e57685 ;
+  border-color:#e57685;
 
 }.btn-jasmine{
    color: #212529;
@@ -596,8 +599,8 @@ body {
 
 }.btn-darkskin{
    color: #212529;
-  background-color:#f172a1 ;
-  border-color:#f172a1;
+  background-color:#f172f3 ;
+  border-color:#f172f3;
 
 }.btn-rose{
    color: #212529;
@@ -1665,6 +1668,9 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .text-white{
   color: floralwhite !important;
 }
+a.text-black{
+  color: #000 !important;
+}
 .a-button {
   color: #fff !important;
   
@@ -1673,10 +1679,9 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   color: #ffd !important;
 }
 
-.jumbotron {
+.jumbotron-blue {
   margin: 0px auto;
   padding: 70px 30px;
-  background: #9575CD;
+  opacity: 0 ;
   color: floralwhite; }
-
 

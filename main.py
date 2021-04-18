@@ -78,92 +78,135 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
-
 @app.route('/trips', methods= ['POST' , 'GET'])
 def trips():
-		if request.method =='POST':
-			newTrip = Trip()			
-			session1.add(newTrip)
-			session1.commit()
-			newTrip_id = newTrip.trip_id
-			if request.form['action'] == 'Transport Booking':
-				newTransport = TransportBooking()				
-				session1.add(newTransport)
-				session1.commit()
-				newTransport_id = newTransport.booking_id
-				newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
-				session1.add(newTrip)
-				session1.commit()
-				return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
-			if request.form['action'] == 'Hotel Booking':
-				return redirect(url_for('hotel' ))
-			if request.form['action'] == 'History':
-				session1.delete(newTrip)
-				session1.commit()
-				return redirect(url_for('bookings' ))
-		else:
-			return render_template("trips.html")
+    if request.method =='POST':
+        newTrip = Trip()
+        session1.add(newTrip)
+        session1.commit()
+        newTrip_id = newTrip.trip_id
+        newTrip.user_id = newUser.user_id
+        if request.form['action'] == 'Transport Booking':
+            newTransport = TransportBooking()
+            session1.add(newTransport)
+            session1.commit()
+            newTransport_id = newTransport.booking_id
+            newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
+            session1.add(newTrip)
+            session1.commit()
+            return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+        if request.form['action'] == 'Hotel Booking':
+            newHotel = HotelBooking()
+            session1.add(newHotel)
+            session1.commit()
+            newHotel_id = newHotel.booking_id
+            newTrip.hotel_bookingnum = newHotel_id
+            session1.add(newTrip)
+            session1.commit()
+            return redirect(url_for('check_in_check_out', newHotel_id = newHotel.booking_id))
+            #return redirect(url_for('hotel' ))
+        if request.form['action'] == 'History':
+            session1.delete(newTrip)
+            session1.commit()
+            return redirect(url_for('bookings' ))
+        if request.form['action'] == 'Profile':
+            session1.delete(newTrip)
+            session1.commit()
+            return redirect(url_for('user' ))
+    else:
+        return render_template("trips.html")
 
-@app.route('/hotel')
-def hotel():
-    mydb = mysql.connector.connect( host="localhost",user="travel",password="dbmsproject",database="sqlalchemy")
-    mycursor = mydb.cursor()
+@app.route('/hotel/<int:id>', methods= ['GET' ,'POST'])
+def hotel(id):
     sql="SELECT hotel_name,hotel_id,hotel_city,hotel_contact FROM hotel"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
     final=[]
     for i in myresult:
         s=str(i)
         s = s[1:-1]
         l=s.split(",")
 
-        s =l[0][1:-1]+","+l[1]+",images/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
+        s =l[0][1:-1]+","+l[1]+",../static/img/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
         final.append(tuple(s.split(",")))
-    return render_template("hotel_display.html",items=final)
-
-@app.route('/hotel_filter/')
-def hotel_filter():
-    mydb = mysql.connector.connect( host="localhost",user="travel",password="dbmsproject",database="sqlalchemy")
-    mycursor = mydb.cursor()
-    sql="SELECT hotel_name,hotel_id,hotel_city,hotel_contact FROM hotel ORDER BY hotel_city"
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
-    final=[]
-    for i in myresult:
-        s=str(i)
-        s = s[1:-1]
-        l=s.split(",")
-        s =l[0][1:-1]+","+l[1]+",images/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
-        final.append(tuple(s.split(",")))
-    return render_template("hotel_display.html",items=final)
-
-@app.route('/hotel/<id>/')
-def hotel_info(id):
-    mydb = mysql.connector.connect( host="localhost",user="swd",password="swd123",database="sqlalchemy")
-    mycursor = mydb.cursor()
-    sql="SELECT hotel_name,hotel_id,hotel_addr,hotel_contact,hotel_num_room FROM hotel "+"WHERE hotel_id="+str(id)
-    mycursor.execute(sql)
-    myresult = mycursor.fetchall()
-    return render_template("hotel_info.html",items=myresult)
-
-@app.route('/cico/', methods = ['GET', 'POST'])  
-def check_in_check_out():
-    # return render_template("check_in_check_out.html")
     if request.method=='POST':
-        ci_date=request.form['check_in']
-        co_date=request.form['check_out']
-        mydb = mysql.connector.connect( host="localhost",user="swd",password="swd123",database="sqlalchemy")
-        mycursor = mydb.cursor()
-        # sql="UPDATE hotel_booking SET check_in='2000-12-23', check_out='2000-12-27' WHERE booking_id=201"
-        sql="UPDATE hotel_booking SET check_in= '"+str(ci_date)+"', check_out='"+str(co_date)+"' WHERE booking_id=201"
-        mycursor.execute(sql)
-        mydb.commit()
-        return hotel()
-    return render_template("check_in_check_out.html")    
+        if request.form['action'] =='Back':
+            return redirect(url_for('check_in_check_out' , newHotel_id = id))
+    else:
+        return render_template("hotel_display.html",items=final , id= id )
 
-@app.route('/bookings')
+@app.route('/hotel_filter/<int:id>', methods=['GET' ,'POST'])
+def hotel_filter(id):
+    sql="SELECT hotel_name,hotel_id,hotel_city,hotel_contact FROM hotel ORDER BY hotel_city"
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    final=[]
+    for i in myresult:
+        s=str(i)
+        s = s[1:-1]
+        l=s.split(",")
+        s =l[0][1:-1]+","+l[1]+",../static/img/"+l[1].strip()+".jpg"+","+l[2][2:-1]+","+l[3][2:-2]
+        final.append(tuple(s.split(",")))
+    if request.method=='POST':
+        if request.form['action'] =='Back':
+            return redirect(url_for('check_in_check_out' , newHotel_id = id))
+    return render_template("hotel_display.html",items=final , id=id)
+
+@app.route('/hotelinfo/<int:id>/<int:hotelid>' , methods =['GET' , 'POST'])
+def hotel_info(hotelid, id):
+    sql="SELECT hotel_name,hotel_id,hotel_addr,hotel_contact,hotel_num_room FROM hotel "+"WHERE hotel_id=%d"%hotelid
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    if request.method =='POST':
+        print("inside post")
+        if request.form['action'] =='Back':
+            return redirect(url_for('hotel' , id = id ))
+        elif request.form['action'] =='Choose this Hotel':
+            newBooking = session1.query(HotelBooking).filter_by(booking_id = id).one()
+            #thisHotel = session1.query(Hotel).filter_by(hotel_id= hotelid).one()
+            newBooking.hotel_id = hotelid 
+            session1.add(newBooking)
+            session1.commit()
+            return redirect(url_for('room_det' ,id = id))
+    else:
+        return render_template("hotel_info.html",items=myresult ,hotelid = hotelid , id = id)
+
+
+@app.route('/cico/<int:newHotel_id>', methods = ['GET', 'POST'])  
+def check_in_check_out(newHotel_id):
+    # return render_template("check_in_check_out.html")
+    newHotel = session1.query(HotelBooking).filter_by(booking_id=newHotel_id).one()
+    print("cico called")
+    if request.method=='POST':
+        if request.form['name'] =='Continue':
+            ci_date=request.form['check_in']
+            co_date=request.form['check_out']
+            print(ci_date, co_date)
+            # sql="UPDATE hotel_booking SET check_in='2000-12-23', check_out='2000-12-27' WHERE booking_id=201"
+            sql="UPDATE hotel_booking SET check_in= '"+str(ci_date)+"', check_out='"+str(co_date)+"' WHERE booking_id= %d" %newHotel.booking_id  
+            cursor.execute(sql )
+            cursor.execute("commit")
+            return redirect(url_for('hotel', id = newHotel_id))
+        elif request.form['name'] =='Back to Trip':
+            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = newHotel.booking_id).one()
+            newTrip.hotel_bookingnum = None 
+            session1.add(newTrip)
+            session1.delete(newHotel)
+            session1.commit()
+            return redirect(url_for('trips' ))
+    return render_template("check_in_check_out.html" , newHotel_id = newHotel_id)    
+
+@app.route('/bookings' ,methods=['GET' ,'POST'])
 def bookings():
-    return render_template("bookings.html")
+    if request.method == 'POST':
+        if request.form['action'] =='Hotel':
+            return redirect(url_for('hotel_history'))
+        elif request.form['action'] =='Transport':
+            return redirect(url_for('travel_history'))
+        elif request.form['action'] =='Back':
+            return redirect(url_for('trips'))
+    else:
+        return render_template("bookings.html")
 
 
 @app.route('/travel/<int:newTransport_id>', methods =['GET','POST'])
@@ -193,9 +236,6 @@ def travel(newTransport_id):
 		print("GET method on travelpage1")
 		return render_template('travelpage1.html' , newTransport_id= newTransport_id )
 
-@app.route('/check')
-def check():
-	return render_template("check_in_check_out.html")
 
 @app.route('/travelcomp/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def travelcomp(newTransport_id):
@@ -238,34 +278,168 @@ def travelcomp(newTransport_id):
 
 @app.route('/confirmtravel/<int:newTransport_id>' , methods = ['GET', 'POST'])
 def confirmtravel(newTransport_id):
-	newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
-	travelcomp = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
-	modes = session1.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
-	if request.method=='POST':
-		if request.form['action'] == 'Delete':
-			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session1.add(travelcomp)
-			itemToDelete = session1.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
-			newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
-			newTrip.travel_bookingnum = None 
-			session1.add(newTrip)
-			session1.delete(itemToDelete)
-			session1.commit()
-			return redirect(url_for('trips'))
-		elif request.form['action'] == 'Confirm':
-			return redirect(url_for('trips'))
-		elif request.form['action'] == 'Back':
-			travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
-			session1.add(travelcomp)
-			session1.commit()
-			return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
-	else:
-		return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
+    newTransport = session1.query(TransportBooking).filter_by(booking_id=newTransport_id).one()
+    travelcomp = session1.query(TravelCompany).filter_by(travel_id= newTransport.travel_id).one()
+    modes = session1.query(Mode).filter_by(mode_id = newTransport.travel_mode).one()
+    if request.method=='POST':
+        if request.form['action'] == 'Delete':
+            travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+            session1.add(travelcomp)
+            itemToDelete = session1.query(TransportBooking).filter_by(booking_id = newTransport_id).one() 
+            newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+            newTrip.travel_bookingnum = None 
+            session1.add(newTrip)
+            session1.delete(itemToDelete)
+            session1.commit()
+            return redirect(url_for('trips'))
+        elif request.form['action'] == 'Confirm':
+            newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+            return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
+        elif request.form['action'] == 'Back':
+            travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
+            session1.add(travelcomp)
+            session1.commit()
+            return redirect(url_for('travelcomp' , newTransport_id= newTransport.booking_id))
+    else:
+        return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
+
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
+
+
+
+
+@app.route('/room_details/<int:id>', methods=['GET', 'POST'])
+def room_det(id):
+#def room_det():
+    if request.method == 'POST':
+        newHBook = session1.query(HotelBooking).filter_by(booking_id = id).one(); 
+        Hotelfetch = session1.query(Hotel).filter_by(hotel_id = newHBook.hotel_id).one()
+        if request.form['action'] =='Submit':
+            var_num=request.form['num']
+            var_rooms=request.form['rooms']
+            x = "SELECT type_id from room where room_type='"+str(var_rooms)+"'"
+            cursor.execute(x)
+            result = cursor.fetchall()
+            newHBook.num_rooms = int(var_num)
+            newHBook.room_type = int(result[0][0])
+            
+            price = session1.query(Room).filter_by(room_type = var_rooms).one()
+
+            newHBook.totprice = newHBook.num_rooms * int(price.price)
+            session1.add(newHBook)
+            session1.commit()
+            Hotelfetch.hotel_num_room = Hotelfetch.hotel_num_room - int(var_num)
+            session1.add(Hotelfetch)
+            session1.commit()
+            #sql = "UPDATE hotel_booking SET room_type = "+str(result[0])+"  WHERE booking_id=201 "
+            #sql = "UPDATE hotel_booking SET room_type =%d "%(result[0])"  WHERE booking_id=%d "%id
+            #cursor.execute(sql)
+            #session1.commit()
+            return redirect(url_for('room_confirmation' , id = id ))
+        if request.form['action'] =='Back':
+            return redirect(url_for('hotel' , id = id ))
+        #return room_confirmation()
+    return render_template("RoomDetails.html" , id = id )
+
+@app.route('/room_confirmation/<int:id>' , methods = ['GET', 'POST'])
+def room_confirmation(id):
+    newHotel = session1.query(HotelBooking).filter_by(booking_id = id).one()
+    hotelDet = session1.query(Hotel).filter_by(hotel_id = newHotel.hotel_id).one()
+    roomType = session1.query(Room).filter_by(type_id = newHotel.room_type).one()
+    if request.method == 'POST':
+        if request.form['action'] == 'Delete':
+            hotelDet.hotel_num_room = hotelDet.hotel_num_room + newHotel.num_rooms
+            session1.add(hotelDet)
+            itemToDelete = session1.query(HotelBooking).filter_by(booking_id = id).one()
+            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = id).one()
+            newTrip.hotel_bookingnum = None 
+            session1.add(newTrip)
+            session1.delete(itemToDelete)
+            session1.commit()
+            return redirect(url_for('trips'))
+        elif request.form['action'] == 'Confirm':
+            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = id).one()            
+            return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
+        elif request.form['action'] == 'Back':
+            hotelDet.hotel_num_room = hotelDet.hotel_num_room + newHotel.num_rooms
+            session1.add(hotelDet)
+            session1.commit()
+            return redirect(url_for('room_det', id = id))
+    else:
+        return render_template("Confirmationhotel.html", newHotel = newHotel, hotelDet = hotelDet, roomType = roomType)
+
+
+@app.route('/hotel_history', methods = ['GET', 'POST'])     #from here 
+def hotel_history():
+    #need to make sure hotel name is unique!!!!!
+    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%newUser.user_id
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    if request.method == 'POST':
+        if request.form['action'] == 'Back':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Next':
+            #REDIRECT TO TRAVEL HISTORY
+            return redirect(url_for('travel_history'))
+    else:
+        return render_template("hotel_history.html",items=myresult)
+
+
+@app.route('/travel_history', methods = ['GET', 'POST'])     #from here 
+def travel_history():
+    
+    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%newUser.user_id
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    if request.method == 'POST':
+        if request.form['action'] == 'Back':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Next':
+            return redirect(url_for('hotel_history'))
+    else:
+        return render_template("travel_history.html",items=myresult)
+
+
+
+
+@app.route('/continue/<int:newTrip_id>' , methods=['GET' ,'POST'])
+def continued(newTrip_id):
+    newTrip = session1.query(Trip).filter_by(trip_id = newTrip_id).one()
+    if request.method =='POST':
+        if request.form['action']=='Return':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'No':
+            return redirect(url_for('trips'))
+        if request.form['action'] == 'Yes':
+            if newTrip.travel_bookingnum == None:
+                newTransport = TransportBooking()
+                session1.add(newTransport)
+                session1.commit()
+                newTransport_id = newTransport.booking_id
+                newTrip.travel_bookingnum = newTransport_id  #error from this line onwards, trip not storing travel_id
+                session1.add(newTrip)
+                session1.commit()
+                return redirect(url_for('travel' , newTransport_id = newTransport.booking_id))
+            if newTrip.hotel_bookingnum == None:
+                newHotel = HotelBooking()
+                session1.add(newHotel)
+                session1.commit()
+                newHotel_id = newHotel.booking_id
+                newTrip.hotel_bookingnum = newHotel_id
+                session1.add(newTrip)
+                session1.commit()
+                return redirect(url_for('check_in_check_out', newHotel_id = newHotel.booking_id))
+            
+    else:
+        return render_template("continued.html" , trip = newTrip )
+
+
+
+
 
 
 if __name__ == '__main__':
