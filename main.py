@@ -18,7 +18,7 @@ mydb = mysql.connector.connect(host="localhost", user="travel", password="dbmspr
 app.secret_key = "maynardjameskeenan"
 cursor = mydb.cursor()
 
-
+curuser=None
 
 DBSession = sessionmaker(bind=engine)
 session1 = DBSession()
@@ -27,23 +27,26 @@ session1 = DBSession()
 def index():
 	return render_template("index.html")
 
-@app.route('/login', methods = ['GET','POST'])
+@app.route('/login',methods=['GET','POST'])
 def login():
-    if request.method == 'POST':
-        session.pop('user', None)
-        #SQL query to retrieve password
-        uname=request.form['username']
-        try:
-            sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
-            cursor.execute(sql)
-            password=cursor.fetchone()[0]
-            if request.form['password'] == password:
-                session['user'] = request.form['username']
-                return render_template('user.html')
-        except Exception as E:
-            print(E)
-            return redirect(url_for('login'))
-    return render_template("login.html")
+	if request.method == 'POST':
+		session.pop('user',None)
+		uname=request.form['username']
+		try:
+			sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
+			cursor.execute(sql)
+			password=cursor.fetchone()[0]
+			if request.form['password']==password:
+				session['user']=request.form['username']
+				sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
+				cursor.execute(sql)
+				curuser=cursor.fetchone()[0]
+				return redirect(url_for('user'))
+		except Exception as E:
+			return redirect(url_for('login'))
+	return render_template("login.html")
+
+
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
@@ -66,8 +69,8 @@ def signup():
 @app.route('/user')
 def user():
     if g.user:
-        return render_template("user.html", user=session['user'])
-    return redirect(url_for("login"))
+        return render_template('user.html')
+    return redirect(url_for('login'))
 
 @app.before_request
 def before_request():
@@ -75,9 +78,6 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
-newUser = session1.query(User).filter_by(user_id=1).one()
-
-        
 @app.route('/trips', methods= ['POST' , 'GET'])
 def trips():
     if request.method =='POST':
@@ -447,7 +447,3 @@ if __name__ == '__main__':
 	app.debug=True
 	app.run(host='0.0.0.0', port=5000)
 
-
-
-
-	
