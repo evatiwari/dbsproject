@@ -330,7 +330,7 @@ def confirmtravel(newTransport_id):
         elif request.form['action'] == 'Confirm':
             newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
             email=session1.query(User).filter_by(user_id=curuser).one().user_email
-            sendmail(newTransport,travelcomp,email) ##
+            sendmail(newTransport,travelcomp,modes,email) ##
             return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
         elif request.form['action'] == 'Back':
             travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
