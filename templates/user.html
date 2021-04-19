@@ -44,8 +44,10 @@
               </li><br><br>
               <li class="active ">
                 <button class="btn btn-sm btn-transparent"> <i class="fa fa-history btn-sm text-white" aria-hidden="true"></i> <input class="btn btn-transparent  text-white" type="submit" value="Your Trip History" name="action"></button>
-              </li><br><br>
+              </li><br><br></p>
+            </form><p align="center">
               <li class="active ">
+              <form action="{{url_for('logout')}}" method ="POST">
               <button class="btn btn-sm btn-transparent"> <i class="fa fa-sign-out btn-sm text-white" aria-hidden="true"></i> <input type="submit" class="btn text-white btn-transparent" value="Sign Out" name="action"></button>
               </li>
               </p>

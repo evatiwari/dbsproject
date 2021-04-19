@@ -339,7 +339,7 @@ def confirmtravel(newTransport_id):
         return render_template("confirmtravel.html" , newTransport = newTransport , travel = travelcomp , mode = modes)
 
 
-@app.route('/logout')
+@app.route('/logout', methods =['GET' , 'POST'])
 @login_required
 def logout():
     session.pop('username', None)
