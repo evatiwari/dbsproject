@@ -29,22 +29,24 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-	if request.method == 'POST':
-		session.pop('user',None)
-		uname=request.form['username']
-		try:
-			sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
-			cursor.execute(sql)
-			password=cursor.fetchone()[0]
-			if request.form['password']==password:
-				session['user']=request.form['username']
-				sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
-				cursor.execute(sql)
-				curuser=cursor.fetchone()[0]
-				return redirect(url_for('trips'))
-		except Exception as E:
-			return redirect(url_for('login'))
-	return render_template("login.html")
+    if request.method == 'POST':
+        session.pop('user',None)
+        uname=request.form['username']
+        try:
+            sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
+            cursor.execute(sql)
+            password=cursor.fetchone()[0]
+            if request.form['password']==password:
+                session['user']=request.form['username']
+                sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
+                cursor.execute(sql)
+                global curuser
+                curuser = cursor.fetchone()[0]
+                return redirect(url_for('trips'))
+        except Exception as E:
+            return redirect(url_for('login'))
+    return render_template("login.html")
+
 
 
 
