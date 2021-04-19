@@ -41,7 +41,7 @@ def login():
 				sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
 				cursor.execute(sql)
 				curuser=cursor.fetchone()[0]
-				return redirect(url_for('user'))
+				return redirect(url_for('trips'))
 		except Exception as E:
 			return redirect(url_for('login'))
 	return render_template("login.html")
@@ -85,7 +85,7 @@ def trips():
         session1.add(newTrip)
         session1.commit()
         newTrip_id = newTrip.trip_id
-        newTrip.user_id = newUser.user_id
+        newTrip.user_id = curuser
         if request.form['action'] == 'Transport Booking':
             newTransport = TransportBooking()
             session1.add(newTransport)
@@ -376,7 +376,7 @@ def room_confirmation(id):
 @app.route('/hotel_history', methods = ['GET', 'POST'])     #from here 
 def hotel_history():
     #need to make sure hotel name is unique!!!!!
-    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%newUser.user_id
+    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%curuser
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':
@@ -392,7 +392,7 @@ def hotel_history():
 @app.route('/travel_history', methods = ['GET', 'POST'])     #from here 
 def travel_history():
     
-    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%newUser.user_id
+    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%curuser
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':
