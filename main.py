@@ -82,13 +82,14 @@ def signup():
 @app.route('/user/',methods = ['GET', 'POST'])
 @login_required
 def user():
+    newUser = session1.query(User).filter_by(user_id=curuser).one()
     if request.method=='POST':
         if request.form['action'] == 'Book a Trip':
             return redirect(url_for('trips'))
         if request.form['action'] == 'Your Trip History':
             return redirect(url_for('bookings'))
     else:
-        return render_template('user.html')
+        return render_template('user.html',newUser=newUser)
             
 
 @app.before_request

@@ -527,6 +527,12 @@ body {
   margin-left: 91.666667%;
 }
 
+.btn-transparent {
+  color: #212529;
+  background-color:transparent;
+  border-color:transparent;
+}
+
 .btn-pink {
   color: #212529;
   background-color: #e57685;

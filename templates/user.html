@@ -11,29 +11,78 @@
     <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
      <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}"> 
+    <style>
+      #nav {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+
+#nav li {
+    display: inline-block;
+    text-align: center;
+}
+    </style>
     <title>User Page</title>
 </head>
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
     <div class="wrapper">
-        <div class="sidebar">
-          <div class="sidebar-wrapper">
+        <div class="sidebar" >
+          <div class="sidebar-wrapper" id ="nav">
             <form action="{{url_for('user')}}" method ="POST">
-            <ul class="nav">
+            <ul  class="nav">
               <p align="center">
               <li class="active ">
-                <input class="btn btn-purple text-white" type="submit" value="User Details" name="action">
-              </li>
+
+
+               <button class="btn btn-sm btn-transparent"> <i class="fa fa-tripadvisor btn-sm text-white" aria-hidden="true"></i>  <input class="btn btn-transparent  text-white" type="submit" value="Book a Trip" name="action"></button>
+
+              </li><br><br>
               <li class="active ">
-                <input class="btn btn-purple text-white" type="submit" value="Book a Trip" name="action">
-              </li>
+                <button class="btn btn-sm btn-transparent"> <i class="fa fa-history btn-sm text-white" aria-hidden="true"></i> <input class="btn btn-transparent  text-white" type="submit" value="Your Trip History" name="action"></button>
+              </li><br><br>
               <li class="active ">
-                <input class="btn btn-purple text-white" type="submit" value="Your Trip History" name="action">
+              <button class="btn btn-sm btn-transparent"> <i class="fa fa-sign-out btn-sm text-white" aria-hidden="true"></i> <input type="submit" class="btn text-white btn-transparent" value="Sign Out" name="action"></button>
               </li>
-            </p>
+              </p>
+
               </ul>
               </form>
           </div>
         </div>
+        <br><br><br><br>
+        <h3 align="center">Hello {{newUser.user_name}}</h3>
+        <div class="card">
+          <div class="card-body">
+                <table align="center" style="font-size: 20px;">
+                
+                   <tr class="card-header">
+                       <th>User</th>
+                       <th>Details</th>
+                   </tr>
+                   <tr>
+                       <td>User Name</td>
+                       <td>{{newUser.user_name}}</td>
+                   </tr>
+                   <tr>
+                       <td>Email</td>
+                       <td> {{newUser.user_email}}</td>
+                   </tr>
+                   <tr>
+                       <td>Phone Number</td>
+                       <td> {{newUser.user_phone}}</td>
+                   </tr>
+                   <tr>
+                       <td>Address</td>
+                       <td>{{newUser.user_address}} </td>
+                   </tr>
+                </table>   
+              </div>
+              </div>
     
     </div>
 </body>
