@@ -18,7 +18,7 @@ Base.metadata.create_all(engine)
 mydb = mysql.connector.connect(host="localhost", user="travel", password="dbmsproject", database="sqlalchemy")
 app.secret_key = "maynardjameskeenan"
 cursor = mydb.cursor()
-
+curuser=None
 
 DBSession = sessionmaker(bind=engine)
 session1 = DBSession()
@@ -37,22 +37,28 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-	if request.method == 'POST':
-		session.pop('user',None)
-		uname=request.form['username']
-		try:
-			sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
-			cursor.execute(sql)
-			password=cursor.fetchone()[0]
-			if request.form['password']==password:
-				session['user']=request.form['username']
-				sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
-				cursor.execute(sql)
-				curuser=int(cursor.fetchone()[0])
-				return redirect(url_for('user',id=curuser))
-		except Exception as E:
-			return redirect(url_for('login'))
-	return render_template("login.html")
+    if request.method == 'POST':
+        session.pop('user',None)
+        uname=request.form['username']
+        try:
+            sql="SELECT user_pass FROM user WHERE user_name='{}'".format(uname)
+            cursor.execute(sql)
+            password=cursor.fetchone()[0]
+            if request.form['password']==password:
+                session['user']=request.form['username']
+                sql="SELECT user_id FROM user WHERE user_name='{}'".format(uname)
+                cursor.execute(sql)
+                global curuser
+                curuser=int(cursor.fetchone()[0])
+                return redirect(url_for('user',id=curuser))
+        except Exception as E:
+            return redirect(url_for('login'))
+    return render_template("login.html")
+
+
+
+
+
 
 
 
@@ -73,14 +79,14 @@ def signup():
         return redirect(url_for('login'))
     return render_template("signup.html")
 
-@app.route('/user/<int:id>',methods = ['GET', 'POST'])
+@app.route('/user/',methods = ['GET', 'POST'])
 @login_required
-def user(id):
+def user():
     if request.method=='POST':
         if request.form['action'] == 'Book a Trip':
-            return redirect(url_for('trips',id=id))
+            return redirect(url_for('trips'))
         if request.form['action'] == 'Your Trip History':
-            return redirect(url_for('bookings',id=id))
+            return redirect(url_for('bookings'))
     else:
         return render_template('user.html')
             
@@ -92,9 +98,9 @@ def before_request():
         g.user = session['user']
 
 
-@app.route('/trips,<int:id>', methods= ['POST' , 'GET'])
+@app.route('/trips', methods= ['POST' , 'GET'])
 @login_required
-def trips(id):
+def trips():
     if request.method =='POST':
         newTrip = Trip()
         session1.add(newTrip)
@@ -123,7 +129,7 @@ def trips(id):
         if request.form['action'] == 'History':
             session1.delete(newTrip)
             session1.commit()
-            return redirect(url_for('bookings',id=id ))
+            return redirect(url_for('bookings' ))
         if request.form['action'] == 'Profile':
             session1.delete(newTrip)
             session1.commit()
@@ -219,14 +225,14 @@ def check_in_check_out(newHotel_id):
     return render_template("check_in_check_out.html" , newHotel_id = newHotel_id)    
 
 
-@app.route('/bookings/<int:id>' ,methods=['GET' ,'POST'])
+@app.route('/bookings/' ,methods=['GET' ,'POST'])
 @login_required
-def bookings(id):
+def bookings():
     if request.method == 'POST':
         if request.form['action'] =='Hotel':
-            return redirect(url_for('hotel_history'),id=id)
+            return redirect(url_for('hotel_history'))
         elif request.form['action'] =='Transport':
-            return redirect(url_for('travel_history'),id=id)
+            return redirect(url_for('travel_history'))
         elif request.form['action'] =='Back':
             return redirect(url_for('trips'))
     else:
@@ -406,11 +412,14 @@ def room_confirmation(id):
         return render_template("Confirmationhotel.html", newHotel = newHotel, hotelDet = hotelDet, roomType = roomType)
 
 
-@app.route('/hotel_history/<int:id>', methods = ['GET', 'POST'])
+@app.route('/hotel_history', methods = ['GET', 'POST'])
 @login_required
-def hotel_history(id):
+def hotel_history():
     #need to make sure hotel name is unique!!!!!
-    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id=%d;"%id
+
+    sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%curuser
+
+    
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':
@@ -423,10 +432,10 @@ def hotel_history(id):
         return render_template("hotel_history.html",items=myresult)
 
 
-@app.route('/travel_history/<int:id>', methods = ['GET', 'POST'])
+@app.route('/travel_history/', methods = ['GET', 'POST'])
 @login_required
-def travel_history(id):
-    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%id
+def travel_history():
+    sql="select tc.travel_name,tc.travel_contact,tb.num_tickets,tb.arrival_date,tb.depart_date,tb.to_dest,tb.from_dest,m.mode_of_transport,m.price from mode m,trip t,travel_company tc,transport_booking tb where t.travel_bookingnum=tb.booking_id and tb.travel_mode=m.mode_id and tb.travel_id=tc.travel_id and t.user_id=%d"%curuser
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':
