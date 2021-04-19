@@ -10,7 +10,7 @@
     <title>Home Page</title>
 </head>
 <body background="{{ url_for('static', filename='img/background.jpg') }}">
-	<p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p>
+	<form action="{{url_for('logout')}}" method ="POST"><p align="right"><button class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>  Sign out</button></p></form>
 	<p align="center">
 		<h1 align="center">Oh Nooo Bookings</h1>
 	</p>
