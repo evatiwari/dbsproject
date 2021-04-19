@@ -7,25 +7,52 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user.css') }}">
     <title>Document</title>
 </head>
-<body>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
     <div class="wrapper">
         <div class="sidebar">
           <div class="sidebar-wrapper">
             <form action="{{url_for('user')}}" method ="POST">
             <ul class="nav">
               <li class="active ">
-                <input type="submit" value="User Details" name="action">
-              </li>
-              <li class="active ">
                 <input type="submit" value="Book a Trip" name="action">
               </li>
               <li class="active ">
                 <input type="submit" value="Your Trip History" name="action">
               </li>
+              <li class="active ">
+                <input type="submit" value="Sign Out" name="action">
+              </li>
               </ul>
               </form>
           </div>
         </div>
+        <div class="card">
+          <div class="card-body">
+                <table align="center">
+                
+                   <tr class="card-header">
+                       <th>User</th>
+                       <th>Details</th>
+                   </tr>
+                   <tr>
+                       <td>User Name</td>
+                       <td>{{newUser.user_name}}</td>
+                   </tr>
+                   <tr>
+                       <td>Email</td>
+                       <td> {{newUser.user_email}}</td>
+                   </tr>
+                   <tr>
+                       <td>Phone Number</td>
+                       <td> {{newUser.user_phone}}</td>
+                   </tr>
+                   <tr>
+                       <td>Address</td>
+                       <td>{{newUser.user_address}} </td>
+                   </tr>
+                </table>   
+              </div>
+              </div>
     
     </div>
 </body>
