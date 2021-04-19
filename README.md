@@ -1,5 +1,7 @@
 # dbsproject
-##Contributors
+
+## Contributors
+
 [Deepti Kumar](https://github.com/0790)
 [Anirudh A](https://github.com/Anirudh-A24)
 [Shreya Srirampur](https://github.com/schmosby2312)
