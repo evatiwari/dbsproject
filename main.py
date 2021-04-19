@@ -10,7 +10,7 @@ from sqlalchemy.sql import text
 from database_setup import Base, User, Trip, TransportBooking, TravelCompany, Mode, Hotel, HotelA, HotelBooking, Room
 import datetime
 from functools import wraps
-from pdfserver.sendmail import sendmail
+from pdfserver.sendmail import sendmail,hotelreservation
 
 engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
 Base.metadata.create_all(engine)
@@ -404,7 +404,9 @@ def room_confirmation(id):
             session1.commit()
             return redirect(url_for('trips'))
         elif request.form['action'] == 'Confirm':
-            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = id).one()            
+            newTrip = session1.query(Trip).filter_by(hotel_bookingnum = id).one()
+            email=session1.query(User).filter_by(user_id=curuser).one().user_email
+            hotelreservation(hotelDet,newHotel,roomType,email)    
             return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
         elif request.form['action'] == 'Back':
             hotelDet.hotel_num_room = hotelDet.hotel_num_room + newHotel.num_rooms
@@ -418,18 +420,13 @@ def room_confirmation(id):
 @app.route('/hotel_history', methods = ['GET', 'POST'])
 @login_required
 def hotel_history():
-    #need to make sure hotel name is unique!!!!!
-
     sql=" select h.hotel_name,h.hotel_city,h.hotel_addr,h.hotel_contact,hb.check_in,hb.check_out,r.price,r.room_type,hb.num_rooms from trip t,hotel_booking hb,hotel h,room r   where t.hotel_bookingnum=hb.booking_id and h.hotel_id=hb.hotel_id  and hb.room_type=r.type_id and t.user_id= %d;"%curuser
-
-    
     cursor.execute(sql)
     myresult = cursor.fetchall()
     if request.method == 'POST':
         if request.form['action'] == 'Back':
             return redirect(url_for('trips'))
         if request.form['action'] == 'Next':
-            #REDIRECT TO TRAVEL HISTORY
             return redirect(url_for('travel_history'))
     else:
         return render_template("hotel_history.html",items=myresult)
