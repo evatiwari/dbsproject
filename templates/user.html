@@ -5,23 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user.css') }}">
-    <title>Document</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type ="text/css" href="{{ url_for('static' , filename='node_modules/bootstrap/dist/css/bootstrap.css')}}">
+     <link rel="stylesheet" href="{{url_for('static' , filename ='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/temp.css') }}"> 
+    <title>User Page</title>
 </head>
-<body>
+<body background="{{ url_for('static', filename='img/background.jpg') }}">
     <div class="wrapper">
         <div class="sidebar">
           <div class="sidebar-wrapper">
             <form action="{{url_for('user')}}" method ="POST">
             <ul class="nav">
+              <p align="center">
               <li class="active ">
-                <input type="submit" value="User Details" name="action">
+                <input class="btn btn-purple text-white" type="submit" value="User Details" name="action">
               </li>
               <li class="active ">
-                <input type="submit" value="Book a Trip" name="action">
+                <input class="btn btn-purple text-white" type="submit" value="Book a Trip" name="action">
               </li>
               <li class="active ">
-                <input type="submit" value="Your Trip History" name="action">
+                <input class="btn btn-purple text-white" type="submit" value="Your Trip History" name="action">
               </li>
+            </p>
               </ul>
               </form>
           </div>
