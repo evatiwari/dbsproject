@@ -10,7 +10,7 @@ from sqlalchemy.sql import text
 from database_setup import Base, User, Trip, TransportBooking, TravelCompany, Mode, Hotel, HotelA, HotelBooking, Room
 import datetime
 from functools import wraps
-from sendmail import sendmail
+from pdfserver.sendmail import sendmail
 
 engine = create_engine('mysql+mysqlconnector://travel:dbmsproject@localhost:3306/sqlalchemy',echo=True)
 Base.metadata.create_all(engine)
@@ -329,6 +329,8 @@ def confirmtravel(newTransport_id):
             return redirect(url_for('trips'))
         elif request.form['action'] == 'Confirm':
             newTrip = session1.query(Trip).filter_by(travel_bookingnum = newTransport_id).one()
+            email=session1.query(User).filter_by(user_id=curuser).one().user_email
+            sendmail(newTransport,travelcomp,email) ##
             return redirect(url_for('continued' , newTrip_id = newTrip.trip_id ))
         elif request.form['action'] == 'Back':
             travelcomp.num_tickets = travelcomp.num_tickets + newTransport.num_tickets
