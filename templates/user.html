@@ -8,8 +8,25 @@
     <title>Document</title>
 </head>
 <body>
-
-    Just a test
-
+    <div class="wrapper">
+        <div class="sidebar">
+          <div class="sidebar-wrapper">
+            <form action="{{url_for('user')}}" method ="POST">
+            <ul class="nav">
+              <li class="active ">
+                <input type="submit" value="User Details" name="action">
+              </li>
+              <li class="active ">
+                <input type="submit" value="Book a Trip" name="action">
+              </li>
+              <li class="active ">
+                <input type="submit" value="Your Trip History" name="action">
+              </li>
+              </ul>
+              </form>
+          </div>
+        </div>
+    
+    </div>
 </body>
 </html>
