@@ -1,4 +1,9 @@
 # dbsproject
+##Contributors
+[Deepti Kumar](https://github.com/0790)
+[Anirudh A](https://github.com/Anirudh-A24)
+[Shreya Srirampur](https://github.com/schmosby2312)
+[Eva Tiwari](https://github.com/evatiwari)
 ## To start contributing:
 1. Fork the original repository. This forked copy should show up on your list of repositories.
 2. Create a folder in your system, and using the command line, cd to it. This folder will contain your project.
